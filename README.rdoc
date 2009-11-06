@@ -1,0 +1,71 @@
+= gvoice-ruby
+
+== Introduction
+
+gvoice-ruby is a library for interacting with Google's Voice service (previously GrandCentral) using ruby.  As Google does not yet publish an official API for Google Voice gvoice-ruby uses the ruby libcurl library (Curb) to interact with the web service itself by using the HTTP verbs POST and GET to send and retrieve information to the Google Voice service.
+
+gvoice-ruby is currently a very preliminary project with limited functionality basically confined to returning arrays of voicemail or sms objects and sending sms messages, or connecting calls.  It cannot cancel calls already in progress.  It currently works under ruby 1.8.7 and 1.9.2-preview1 on my computer running Mac OS X 10.6 (Snow Leopard).  It is not guaranteed to work anywhere else and has very few tests.
+
+== Prerequisites
+
+1.) The Curb library (gem install curb)
+
+2.) The Nokogiri library (gem install nokogiri)
+
+3.) The JSON library (gem install json)
+
+4.) Possibly setting your RUBYOPT environment variable to the string 'rubygems'.
+
+	$ RUBYOPT='rubygems'
+	
+	$ echo $RUBYOPT
+	
+	=> rubygems
+
+== Installing
+
+Eventually it will be a gem, but for now:
+
+	$ git clone git://github.com/kgautreaux/gvoice-ruby.git
+
+== Examples
+
+Please see the bin/ directory for examples of using the library to accomplish some tasks.
+
+== Known Issues
+
+The library tries not to require 'rubygems' per http://gist.github.com/54177 and thus works fine on 1.9.2-preview1 but breaks on 1.8.7 unless you invoke any of the scripts with ruby -rubygems [whatever...] or set your RUBYOPT environment variable as noted above.  
+
+Alternatively you can require 'rubygems' in your own script using the underlying library or set your $RUBYOPT environment variable as outlined in the gist above, but keep this issue in mind.
+
+== BUGS
+
+1.) It has few tests.
+
+2.) If the Google Voice service changes in any way it will break.
+
+3.) If the libraries used change it will break.
+
+4.) It is somewhat tightly coupled to the private post_page and fetch_page methods (sms and voicemail arrays depend upon these methods).
+
+5.) It is not RESTful in any way.
+
+6.) It cannot yet cancel calls, but it can initiate them.
+
+7.) It is my first attempt at writing a library and is not idiomatic ruby.
+
+8.) It requires rubygems but doesn't set RUBYOPT environment variable.
+
+9.) It requires the file compatibility.rb which monkeypatches the Array and Symbol classes on Ruby < 1.9 to enable sorting.
+
+10.) You cannot change any of the Google Voice settings using this library.
+
+11.) The library loads a specific YAML file that must be in place for anything to work as the script has no logical defaults.
+
+12.) Minimal to no error handling present.  Fail silent...Fail deep.
+
+13.) The library doesn't post the id of sms messages it sends so they don't get associated with any conversation in Google Voice.
+
+== Thanks
+
+Thanks to Chad Smith for posting the URL for accessing the Google Voice service as listed on http://posttopic.com/topic/google-voice-add-on-development#post-27

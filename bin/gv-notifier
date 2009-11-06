@@ -1,0 +1,58 @@
+#!/usr/bin/env ruby -W1
+# coding: UTF-8
+$:.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
+require 'gvoice-ruby'
+require 'xmpp4r-simple'
+
+include GvoiceRuby
+
+config = GvoiceRuby.load_config
+
+# Main
+jabber_bot = Jabber::Simple.new(config[:bot_name], config[:bot_password])
+
+voicebox = GvoiceRuby::Client.new
+                          
+# message_counts, start_times = voicebox.unread_counts, voicebox.start_times
+
+# message_counts.each { |count| p count } unless message_counts.empty?
+
+# p voicebox.all_messages
+# p voicebox.any_unread?
+# p voicebox.unread_counts
+
+voicebox.check
+
+if voicebox.any_unread?
+  sms_messages = []
+  voicemail_messages = []
+  
+  voicebox.smss.each do |t|
+    if t.labels.include?('unread')
+      sms_messages << "#{t.from} says: '#{t.text}' at #{t.display_start_date_time}\n"
+    else
+      next
+    end
+  end
+  
+  voicebox.voicemails.each do |v|
+    if v.labels.include?('unread')
+      voicemail_messages << "Voicemail from #{v.from} at #{v.display_start_date_time}:\n#{v.transcript}"
+    else
+      next
+    end
+  end
+  
+  begin
+    [sms_messages, voicemail_messages].each do |thing|
+      thing.each { |m| jabber_bot.deliver(voicebox.user.email, m, :normal);p m }
+    end
+  rescue
+    raise
+  end
+  config[:last_message_start_time] = voicebox.all_messages.last.start_time
+else
+   print "No unread messages in your Google Voice inbox.\n"
+end
+
+GvoiceRuby.write_config(config)
