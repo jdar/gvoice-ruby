@@ -1,0 +1,10 @@
+--- 
+:google_auth_url: https://www.google.com/accounts/ServiceLoginAuth
+:google_account_password: your_google_account_password
+:continue_url: https://www.google.com/voice
+:last_message_start_time: 0
+:bot_name: your_gtalk_or_jabber_bot_name
+:google_service: grandcentral
+:bot_password: your_gtalk_bot_password
+:google_voice_feed_url: https://www.google.com/voice/inbox/recent
+:google_account_email: your_google_email_address@gmail.com
