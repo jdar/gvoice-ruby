@@ -78,18 +78,19 @@ module GvoiceRuby
         doc = Nokogiri::HTML::DocumentFragment.parse(curl.body_str)
         doc.css('div.loginBox table#gaia_table input').each do |input|
           if input.to_s =~ /GALX/
-            @galx = input.to_s.scan(/value\="(.+?)"/)
-            # puts @galx
+            @galx = input.to_s.scan(/value\="(.+?)"/).flatten!.pop
+            p @galx
           else
           end
         end
 
         fields = [ PostField.content('continue', options[:continue_url]), #'https://www.google.com/voice'
-             PostField.content('GALX', @galx.to_s),
+             PostField.content('GALX', @galx),
              PostField.content('service', options[:google_service]),
              PostField.content('Email', options[:google_account_email]),
              PostField.content('Passwd', options[:google_account_password]) ]
 
+        # puts fields
         curl.http_post(fields)
       end
     end

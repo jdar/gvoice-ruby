@@ -45,7 +45,7 @@ if voicebox.any_unread?
   
   begin
     [sms_messages, voicemail_messages].each do |thing|
-      thing.each { |m| jabber_bot.deliver(voicebox.user.email, m, :normal);p m }
+      thing.each { |m| jabber_bot.deliver(voicebox.user.email, m, :normal);print m }
     end
   rescue
     raise
