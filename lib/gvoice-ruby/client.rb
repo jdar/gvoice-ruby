@@ -79,7 +79,7 @@ module GvoiceRuby
         doc.css('div.loginBox table#gaia_table input').each do |input|
           if input.to_s =~ /GALX/
             @galx = input.to_s.scan(/value\="(.+?)"/).flatten!.pop
-            p @galx
+            # p @galx
           else
           end
         end
