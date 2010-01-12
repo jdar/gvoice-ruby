@@ -234,7 +234,7 @@ module GvoiceRuby
       
       @voicemails.each do |vm_obj|
         page_fragment.css('table.gc-message-tbl').each do |row|
-          if row.css('span.gc-message-time') =~ Regexp.new(vm_obj.display_start_date_time)
+          if row.css('span.gc-message-time').text =~ Regexp.new(vm_obj.display_start_date_time)
             vm_obj.to         = 'Me'
             vm_obj.from       = row.css('a.gc-under.gc-message-name-link').inner_html
             vm_obj.transcript = row.css('div.gc-message-message-display').inner_text.to_s.gsub(/\n/, '').strip!
