@@ -48,6 +48,30 @@ module GvoiceRuby
       parse_page(fetch_page)
     end
     
+    def archive(id) 
+      fields = [ PostField.content('messages', id), PostField.content('archive', 1), PostField.content('_rnr_se', @_rnr_se)]
+      
+      @curb_instance.http_post(fields)
+      
+      @curb_instance.url = 'https://www.google.com/voice/inbox/archiveMessages/'
+      
+      @curb_instance.perform
+      logger.info "FINISHED POST TO 'https://www.google.com//voice/inbox/mark/': HTTP #{@curb_instance.response_code}"
+      return @curb_instance
+    end
+    
+    def mark_as_read(id) 
+      fields = [ PostField.content('messages', id), PostField.content('read', 1), PostField.content('_rnr_se', @_rnr_se)]
+      
+      @curb_instance.http_post(fields)
+      
+      @curb_instance.url = 'https://www.google.com/voice/inbox/mark/'
+
+      @curb_instance.perform
+      logger.info "FINISHED POST TO 'https://www.google.com//voice/inbox/mark/': HTTP #{@curb_instance.response_code}"
+      return @curb_instance
+    end
+    
     def logout
       if logged_in?
         @curb_instance.url = "https://www.google.com/voice/account/signout"
@@ -132,7 +156,7 @@ module GvoiceRuby
     end
     
     def parse_page(page_obj)
-      doc = Nokogiri::XML::DocumentFragment.parse(page_obj.body_str)
+      doc = Nokogiri::XML.parse(page_obj.body_str)
       
       # p doc
       
