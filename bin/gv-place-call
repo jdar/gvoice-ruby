@@ -4,9 +4,7 @@ $:.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 require 'gvoice-ruby'
 include GvoiceRuby
 
-config = GvoiceRuby.load_config
-
-voicebox = GvoiceRuby::Client.new(config)
+voicebox = GvoiceRuby::Client.new
 
 this_phone = { :outgoing_number => "3088720071", :forwarding_number => "3088721257", :post_url => "https://www.google.com/voice/call/connect/" }
 

@@ -6,7 +6,7 @@ require 'xmpp4r-simple'
 
 include GvoiceRuby
 
-config = GvoiceRuby.load_config
+config = GvoiceRuby::Configurator.load_config
 
 # Main
 jabber_bot = Jabber::Simple.new(config[:bot_name], config[:bot_password])
@@ -55,4 +55,4 @@ else
    print "No unread messages in your Google Voice inbox.\n"
 end
 
-GvoiceRuby.write_config(config)
+GvoiceRuby::Configurator.write_config(config)

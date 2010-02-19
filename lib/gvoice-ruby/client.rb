@@ -10,7 +10,7 @@ module GvoiceRuby
     attr_reader :logger
     
     def initialize
-      options = GvoiceRuby.load_config
+      options = GvoiceRuby::Configurator.load_config
       if options[:google_account_email].nil? || options[:google_account_password].nil?
         raise ArgumentError, "Invalid Google Account username or password provided."
       else          
