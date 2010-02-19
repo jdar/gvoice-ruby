@@ -9,14 +9,13 @@ module GvoiceRuby
     attr_accessor :page, :unread_counts, :start_times, :smss, :voicemails, :user, :all_messages
     attr_reader :logger
     
-    def initialize
-      options = GvoiceRuby::Configurator.load_config
-      if options[:google_account_email].nil? || options[:google_account_password].nil?
+    def initialize(config = GvoiceRuby::Configurator.load_config)
+      if config[:google_account_email].nil? || config[:google_account_password].nil?
         raise ArgumentError, "Invalid Google Account username or password provided."
       else          
         @logger        = Logger.new(File.join(File.dirname(__FILE__), '..', '..', 'log', 'gvoice-ruby.log'))
-        @user          = User.new(options[:google_account_email], options[:google_account_password])
-        @curb_instance = login(options)
+        @user          = User.new(config[:google_account_email], config[:google_account_password])
+        @curb_instance = login(config)
         @smss          = []
         @voicemails    = []
         @any_unread    = []
