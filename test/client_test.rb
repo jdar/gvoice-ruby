@@ -22,6 +22,7 @@ class ClientTest < Test::Unit::TestCase
   end
   
   should "raise an error when unable to connect to Google" do
+    
     assert true
   end
   
