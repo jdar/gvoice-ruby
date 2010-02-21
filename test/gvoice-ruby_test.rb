@@ -5,6 +5,7 @@ class GvoiceRubyTest < Test::Unit::TestCase
   
   def setup
     setup_config_fixture
+    @config = GvoiceRuby::Configurator.load_config(@config_file)
   end
   
   should "have project root constant" do

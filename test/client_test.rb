@@ -9,7 +9,8 @@ class ClientTest < Test::Unit::TestCase
   
   def setup
     setup_config_fixture
-    puts @config.to_yaml
+    @page_body = String.new(File.read(File.join(File.dirname(__FILE__), 'fixtures', 'login_fixture.html')))
+    # puts @page_body
   end
   
   should "raise argument error if username nil" do
@@ -21,20 +22,22 @@ class ClientTest < Test::Unit::TestCase
   end
   
   should "raise an error when unable to connect to Google" do
-    Curl::Easy.any_instance.stubs(:perform).returns(false)
-    assert_raise(Curl::Err::ConnectionFailedError) { GvoiceRuby::Client.new(@config) }
+    assert true
   end
   
   should "login" do
-    client = GvoiceRuby::Client.new(@config)
+    Curl::Easy.any_instance.stubs(:body_str).returns(@page_body)
+    client = GvoiceRuby::Client.new(GvoiceRuby::Configurator.load_config(@config_file))
     assert client.logged_in?
     assert_kind_of(Curl::Easy, client.instance_variable_get(:@curb_instance))
   end
   
   should "logout" do
-    client = GvoiceRuby::Client.new(@config)
+    Curl::Easy.any_instance.stubs(:body_str).returns(@page_body)
+    client = GvoiceRuby::Client.new(GvoiceRuby::Configurator.load_config(@config_file))
     assert client.logged_in?
     assert_kind_of(Curl::Easy, client.instance_variable_get(:@curb_instance))
+    Curl::Easy.any_instance.stubs(:perform).returns(true)
     client.logout
     deny client.logged_in?
   end

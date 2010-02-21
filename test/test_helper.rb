@@ -10,7 +10,7 @@ require 'gvoice-ruby'
 class Test::Unit::TestCase
   
   def setup_config_fixture
-    @config = GvoiceRuby::Configurator.load_config(File.join(File.dirname(__FILE__), 'fixtures', 'config_fixture.yml'))
+    @config_file = File.join(File.dirname(__FILE__), 'fixtures', 'config_fixture.yml')
   end
   
   def deny(*args)

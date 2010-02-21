@@ -156,19 +156,29 @@ module GvoiceRuby
           @galx = input.to_s.scan(/value\="(.+?)"/).flatten!.pop
           # p @galx
         else
+          next
+          # raise IOError, 'Cannot fetch galx attribute from Google.'
         end
       end
     end
     
     def set_rnr_se_token
-      if @curb_instance.instance_of?(Curl::Easy) && @curb_instance.response_code == 200
+      if @curb_instance.response_code == 200 #&& @curb_instance.respond_to?(:perform) # Vestigial?
         @curb_instance.url = "http://www.google.com/voice"
         @curb_instance.perform 
-        @_rnr_se = Nokogiri::HTML::Document.parse(@curb_instance.body_str).css('form#gc-search-form').inner_html
-        /value="(.+)"/.match(@_rnr_se)
-        @_rnr_se = $1
+        @_rnr_se = extract_rnr_se(@curb_instance.body_str)
       else
         raise IOError, "Curb instance was not properly initialized."  
+      end
+    end
+    
+    def extract_rnr_se(body_string)
+      begin
+        Nokogiri::HTML::Document.parse(body_string).css('form#gc-search-form').inner_html
+        /value="(.+)"/.match(@_rnr_se)
+        return $1
+      rescue IOError
+        raise IOError, "Problem extracting _rnr_se code from page."
       end
     end
   end

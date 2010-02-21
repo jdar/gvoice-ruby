@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html>
+  <style type="text/css"><!--
+  body,td,div,p,a,font,span {font-family: arial,sans-serif;}
+  body {margin-top:2}.c {width:4; height: 4} 
+  html body { bgcolor: "#ffffff"; padding: 0; margin: 0; } 
+  A:link {color:#0000cc; } 
+  A:visited { color:#551a8b; }
+  A:active { color:#ff0000; }
+  .form-noindent {background-color: #ffffff; border: #C3D9FF 1px solid;}
+
+  div { display: block; }
+
+  div.loginBox {
+    padding-top: 10px;
+    padding-bottom: 16px;
+  }
+
+  #gc-signup-closed {
+    background-color: #ffffcd;
+    width: 600px;
+    font-size: 13px;
+    margin-top: 30px;
+    padding: 10px;
+    text-align: center;
+  }
+
+  #gaia_table {
+    white-space: normal;
+    text-align: left;
+  }
+
+  .gc-mid {
+    width: 806px;
+    margin: 0 auto;
+  }
+
+  #gc-footer {
+    padding: 60px 0 0 0;
+  }
+
+  #gc-footer a,
+  #gc-more a {
+    color: #3b73cc;
+  }
+
+  #gc-main {
+    width: 100%;
+  }
+
+  #gc-main td {
+    text-align: left;
+  }
+
+  #gc-banner {
+    display: block;
+    height: 90px;
+    background-color: #E0ECFF;
+    border-top: 1px solid #C3D9FF;
+    border-bottom: 1px solid #C3D9FF;
+    text-align: left;
+  }
+
+  #gc-banner-content {
+    height: 90px;
+    position: relative;
+  }
+
+  #gc-banner-low {
+    margin: 14px 0 0 0;
+  }
+
+  #gc-watch {
+    color: #3b73cc;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 3px 0 3px 30px;
+    background: url(/accounts/grandcentral/movie_button.gif) no-repeat center left;
+  }
+
+  #gc-create-acc {
+    position: absolute;
+    top: -100px;
+    right: 0px;
+  }
+
+  .gc-features {
+    width: 528px;
+    color: #666;
+    margin: 16px 0 10px 0;
+  }
+
+  .gc-features td {
+    vertical-align: top;
+    padding: 8px 0;
+  }
+
+  .gc-sep {
+    border-right: 1px solid #ccc;
+  }
+
+  .gc-item-hd {
+    font-weight: bold;
+    font-size: 14px;
+  }
+
+  .gc-item-txt {
+    font-size: 12px;
+    padding: 4px 0 16px;
+  }
+
+  .gc-item-details {
+    width: 268px;
+  }
+
+  .gc-item-img {
+    width: 68px;
+    float: left;
+  }
+
+  .gc-item-list {
+    width: 200px;
+    float: right;
+  }
+
+  ul.gc-signup-list {
+    margin: 0 0 0 24px;
+    padding: 0;
+    font-size: 12px;
+  }
+
+  ul.gc-signup-list li {
+    line-height: 1.4em;
+    padding: 0 0 0.5em;
+  }
+
+  #gc-more {
+    padding: 10px 0 0 2px;
+    text-align: left;
+  }
+
+  .gc-nopad {
+    padding: 0;
+  }
+
+  .gc-si-content {
+    position: absolute;
+    top: -70px;
+    right: 2px;
+    height: 248px;
+    white-space: normal;
+    width: 248px;
+    z-index: 8;
+  }
+
+--></style>
+  <style type="text/css"><!--
+.gaia.le.lbl { font-family: Arial, Helvetica, sans-serif; font-size: smaller; }
+.gaia.le.fpwd { font-family: Arial, Helvetica, sans-serif; font-size: 70%; }
+.gaia.le.chusr { font-family: Arial, Helvetica, sans-serif; font-size: 70%; }
+.gaia.le.val { font-family: Arial, Helvetica, sans-serif; font-size: smaller; }
+.gaia.le.button { font-family: Arial, Helvetica, sans-serif; font-size: smaller; }
+.gaia.le.rem { font-family: Arial, Helvetica, sans-serif; font-size: smaller; }
+
+.gaia.captchahtml.desc { font-family: arial, sans-serif; font-size: smaller; } 
+.gaia.captchahtml.cmt { font-family: arial, sans-serif; font-size: smaller; font-style: italic; }
+  
+--></style>
+  <head>
+  <title>Google Voice - One phone number, online voicemail, and enhanced call features</title>
+  <style type="text/css"><!--
+  
+  
+    body {
+      font-family: arial, sans-serif;
+      margin: 0;
+      padding: 13px 15px 15px;
+      
+    }
+    .body {
+      margin: 0;
+    }
+    div.errorbox-good {}
+
+    div.errorbox-bad {} 
+
+    div.errormsg { color: red; font-size: smaller; font-family: arial,sans-serif;}
+    font.errormsg { color: red; font-size: smaller; font-family: arial,sans-serif;}
+
+    
+    div.topbar {
+      font-size:smaller;
+      margin-right: -5px;
+      text-align:right;
+      white-space:nowrap;
+    }
+    div.header {
+      margin-bottom: 9px;
+      margin-left: -2px;
+      position:relative;
+      zoom: 1
+    }
+    div.header img.logo {
+      border: 0;
+      float:left;
+    }
+    div.header div.headercontent {
+      float:right;
+      margin-top:17px;
+    }
+    div.header:after{
+      content:".";
+      display:block;
+      height:0;
+      clear:both;
+      visibility:hidden;
+    }
+    div.pagetitle {
+      font-weight:bold;
+    }
+    
+    .footer { 
+      color: #666;
+      font-size: smaller;
+      margin-top: 40px;
+      text-align: center;
+    }
+    
+    table#signupform {
+      left: -5px;
+      top: -7px;
+      position:relative;
+    }
+    table#signupform td{
+      padding: 7px 5px;
+    }
+    table#signupform td table td{
+      padding: 1px;
+    }
+
+    
+    
+    hr {
+      border: 0;
+      background-color:#DDDDDD;
+      height: 1px;
+      width: 100%;
+      text-align: left;
+      margin: 5px;
+    }
+    
+
+    
+    
+  --></style>
+  <meta name="description" content="Google Voice gives you one number for all your phones, voicemail as easy as email, free US long distance, low rates on international calls, and many calling features like transcripts, call blocking, call screening, conference calling, SMS, and more.">
+</head>
+  <body dir="ltr"
+        onload=
+                 "gaia_setFocus();"
+               >
+  <div class="gc-mid">
+  <div style="padding: 20px 0 6px 0;">
+  <a href='https://www.google.com/voice'>
+  <img src="/accounts/grandcentral/voice-logo.png"
+        border="0"
+        alt="Google Voice" />
+  </a>
+</div>
+  </div>
+  <div id="gc-banner">
+  <table id="gc-banner-content" class="gc-mid">
+  <tr>
+  <td>
+  <div><img alt="Supercharge your phone" src="/accounts/grandcentral/banner1.png"/></div>
+  </td>
+  </tr>
+  </table>
+  </div>
+  <div class="gc-mid" style="position: relative;">
+<table class="gc-features">
+  <tr>
+  <td class="gc-sep" style="padding-right: 0;">
+  <div class="gc-item-hd">Use your existing number</div>
+  <div class="gc-item-txt">and get these features:</div>
+  <div class="gc-item-details">
+  <div class="gc-item-img"><img src="/accounts/grandcentral/gvl.png" alt=""/></div>
+  <div class="gc-item-list">
+  <ul class="gc-signup-list">
+  <li><b>Transcribed voicemail</b> online</li>
+  <li>Low cost <b>international calls</b></li>
+  <li><b>Custom greetings</b> for callers</li>
+  </ul>
+  </div>
+  </div>
+  </td>
+  <td style="padding-left: 8px;">
+  <div class="gc-item-hd">Get a Google number</div>
+  <div class="gc-item-txt">and get these additional features:</div>
+  <div class="gc-item-details">
+  <div class="gc-item-img"><img src="/accounts/grandcentral/gv.png" alt=""/></div>
+  <div class="gc-item-list">
+  <ul class="gc-signup-list">
+  <li><b>One number</b> for all your phones</li>
+  <li>Get <b>SMS messages</b> via email</li>
+  <li><b>Block</b> unwanted callers</li>
+  </ul>
+  </div>
+  </div>
+  </td>
+  </tr>
+</table>
+  <div class="gc-si-content">
+<script><!--
+
+function gaia_onLoginSubmit() {
+
+  
+  if (window.gaiacb_onLoginSubmit) {
+    return gaiacb_onLoginSubmit();
+  } else {
+    return true;
+  }
+
+}
+
+
+function gaia_setFocus() {
+  var f = null;
+  if (document.getElementById) { 
+    f = document.getElementById("gaia_loginform");
+  } else if (window.gaia_loginform) { 
+    f = window.gaia_loginform;
+  } 
+  if (f) {
+    if (f.Email && (f.Email.value == null || f.Email.value == "")) {
+      f.Email.focus();
+    } else if (f.Passwd) {
+      f.Passwd.focus();
+    } 
+  }
+}
+--></script>
+<style type="text/css"><!--
+  div.errormsg { color: red; font-size: smaller; font-family:arial,sans-serif; }
+  font.errormsg { color: red; font-size: smaller; font-family:arial,sans-serif; }  
+--></style>
+<style type="text/css"><!--
+.gaia.le.lbl { font-family: Arial, Helvetica, sans-serif; font-size: smaller; }
+.gaia.le.fpwd { font-family: Arial, Helvetica, sans-serif; font-size: 70%; }
+.gaia.le.chusr { font-family: Arial, Helvetica, sans-serif; font-size: 70%; }
+.gaia.le.val { font-family: Arial, Helvetica, sans-serif; font-size: smaller; }
+.gaia.le.button { font-family: Arial, Helvetica, sans-serif; font-size: smaller; }
+.gaia.le.rem { font-family: Arial, Helvetica, sans-serif; font-size: smaller; }
+
+.gaia.captchahtml.desc { font-family: arial, sans-serif; font-size: smaller; } 
+.gaia.captchahtml.cmt { font-family: arial, sans-serif; font-size: smaller; font-style: italic; }
+  
+--></style>
+<form id="gaia_loginform"
+      
+        action="https://www.google.com/accounts/ServiceLoginAuth?service=grandcentral" method="post"
+      
+      onsubmit=
+                 "return(gaia_onLoginSubmit());"
+                >
+<div id="gaia_loginbox">
+<table class="form-noindent" cellspacing="3" cellpadding="5" width="100%" border="0">
+  <tr>
+  <td valign="top" style="text-align:center" nowrap="nowrap"
+        bgcolor="#e8eefa">
+  <input type="hidden" name="ltmpl"
+             value="bluebar">
+  <div class="loginBox">
+  <table id="gaia_table" align="center" border="0" cellpadding="1" cellspacing="0">
+  <tr>
+<td colspan="2" align="center">
+  <font size="-1">
+  Sign in to
+  Google Voice
+  with your
+  </font>
+  <table>
+  <tr>
+  <td valign="top">
+  <img src="google_transparent.gif"
+           alt="Google">
+  </img>
+  </td>
+  <td valign="middle">
+  <font size="+0"><b>Account</b></font>
+  </td>
+  </tr>
+</table>
+</td>
+</tr>
+  <script type="text/javascript"><!--
+    function onPreCreateAccount() {
+    
+      return true;
+    
+    }
+
+    function onPreLogin() {
+    
+      
+      if (window["onlogin"] != null) {
+        return onlogin();
+      } else {
+        return true;
+      }
+    
+    }
+  --></script>
+<tr>
+  <td colspan="2" align="center">
+  </td>
+</tr>
+<tr id="email-row">
+  <td nowrap="nowrap">
+  <div align="right">
+  <span class="gaia le lbl">
+  Email:
+  </span>
+  </div>
+  </td>
+  <td>
+  <input type="hidden" name="continue" id="continue"
+           value="https://www.google.com/voice/account/signin" />
+  <input type="hidden" name="service" id="service"
+           value="grandcentral" />
+  <input type="hidden" name="dsh" id="dsh"
+           value="42373325670724957" />
+  <input type="hidden" name="ltmpl" id="ltmpl"
+           value="bluebar" />
+  <input type="hidden" name="ltmpl" id="ltmpl"
+           value="bluebar" />
+  <input type="hidden"
+             name="GALX"
+             value="k0KpPxKzZJw" />
+  <input type="text" name="Email"  id="Email"
+  size="18" value=""
+  
+  
+    class='gaia le val'
+  
+  />
+  </td>
+</tr>
+<tr>
+  <td></td>
+  <td align="left">
+  </td>
+</tr>
+<tr id="password-row" class="enabled">
+  <td align="right" nowrap="nowrap">
+  <span class="gaia le lbl">
+  Password:
+  </span>
+  </td>
+  <td>
+  <input type="password"
+   name="Passwd" id="Passwd"
+  size="18" 
+  
+  
+
+  
+    class="gaia le val" 
+  
+  />
+  </td>
+</tr>
+<tr>
+  <td> </td>
+  <td align="left">
+  </td>
+</tr>
+  <tr id="rememberme-row" class="enabled">
+  <td align="right" valign="top">
+  <input type="checkbox" name="PersistentCookie" id="PersistentCookie"
+    value="yes"
+  
+    checked='checked'
+  
+  />
+  <input type="hidden" name='rmShown' value="1" />
+  </td>
+  <td>
+  <label for="PersistentCookie" id="PersistentCookieLabel" class="gaia le rem">
+  Stay signed in
+  </label>
+  </td>
+</tr>
+<tr>
+  <td>
+  </td>
+  <td align="left">
+  <input type="submit" class="gaia le button" name="signIn"
+           value="Sign in"
+                  />
+  </td>
+</tr>
+<tr id="ga-fprow">
+  <td colspan="2" height="33.0" class="gaia le fpwd"
+    align="center" valign="bottom">
+  <a href="http://www.google.com/support/accounts/bin/answer.py?answer=48598&amp;hl=en&amp;ctx=ch_ServiceLogin&amp;p=grandcentral&amp;fpUrl=https%3A%2F%2Fwww.google.com%2Faccounts%2FForgotPasswd%3FfpOnly%3D1%26continue%3Dhttps%253A%252F%252Fwww.google.com%252Fvoice%252Faccount%252Fsignin%26service%3Dgrandcentral%26ltmpl%3Dbluebar"
+       target=_top>
+  Can&#39;t access your account?
+  </a>
+  </td>
+</tr>
+  </table>
+  </div>
+  </td>
+  </tr>
+</table>
+</div>
+<input type="hidden" name="asts"
+       id="asts"
+       value="">
+</form>
+<form id="gaia_universallogin"
+      action="https://www.google.com/accounts/ServiceLoginAuth?service=grandcentral" method="post"
+      onsubmit="return(gaia_onLoginSubmit());">
+  <input type="hidden" name="continue" id="continue"
+           value="https://www.google.com/voice/account/signin" />
+  <input type="hidden" name="service" id="service"
+           value="grandcentral" />
+  <input type="hidden" name="dsh" id="dsh"
+           value="42373325670724957" />
+  <input type="hidden" name="ltmpl" id="ltmpl"
+           value="bluebar" />
+  <input type="hidden" name="ltmpl" id="ltmpl"
+           value="bluebar" />
+  <input type="hidden" name="ltmpl" id="ltmpl"
+           value="bluebar" />
+</form>
+  </div>
+  </div>
+  <div class="gc-mid" id="gc-more">
+  <a style="font-weight: bold; font-size: 13px;"
+        href="https://www.google.com/voice/about"
+        >See more features <span style="font-size: 16px;">&raquo;</span></a>
+  </div>
+  <div class="gc-mid" id="gc-signup-closed">
+  Google Voice is currently available by invite only.&nbsp;&nbsp;
+  <a href="https://services.google.com/fb/forms/googlevoiceinvite/" target="_blank">Request an invite</a>
+  </div>
+  <div id="gc-footer" class="gc-mid">
+  <div style="border-top: 1px solid #C3D9FF; margin: 0pt 3px; padding: 4px;">
+  <center>
+  <font color="#676767" size="-1">
+  &copy;2010 Google
+  -
+  <a href='http://www.google.com/support/voice/'>Help</a>
+  -
+  <a href='https://www.google.com/voice/help'>Terms</a>
+  -
+  <a href='http://googlevoiceblog.blogspot.com/'>Blog</a>
+  </font>
+  </center>
+</div>
+  </div>
+  </body>
+</html>
