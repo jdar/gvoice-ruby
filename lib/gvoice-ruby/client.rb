@@ -1,6 +1,6 @@
 # coding: UTF-8
 $:.unshift(File.dirname(__FILE__))
-%w[curb nokogiri json sms voicemail user logger compatibility open-uri].each { |lib| require lib }
+%w[curb nokogiri json sms voicemail user logger compatibility inbox_parser open-uri].each { |lib| require lib }
 
 module GvoiceRuby
   class Client
@@ -16,8 +16,6 @@ module GvoiceRuby
         @logger        = Logger.new(File.join(File.dirname(__FILE__), '..', '..', 'log', 'gvoice-ruby.log'))
         @user          = User.new(config[:google_account_email], config[:google_account_password])
         @curb_instance = login(config)
-        @smss          = []
-        @voicemails    = []
         @any_unread    = []
         @start_times   = []
         @unread_counts = {}
@@ -43,32 +41,22 @@ module GvoiceRuby
       post_page(:call, options)
     end
     
-    def check
-      parse_page(fetch_page)
+    def check(parser = GvoiceRuby::InboxParser.new)
+      inbox = parser.parse_page(fetch_page)
+      
+      get_unread_counts(inbox)
+      smss = parser.parse_sms_messages(inbox['messages'])
+      voicemails = parser.parse_voicemail_messages(inbox['messages'])
+      @all_messages = smss | voicemails
+      @all_messages.sort_by!(&:start_time)
     end
     
-    def archive(id) 
-      fields = [ PostField.content('messages', id), PostField.content('archive', 1), PostField.content('_rnr_se', @_rnr_se)]
-      
-      @curb_instance.http_post(fields)
-      
-      @curb_instance.url = 'https://www.google.com/voice/inbox/archiveMessages/'
-      
-      @curb_instance.perform
-      logger.info "FINISHED POST TO 'https://www.google.com//voice/inbox/mark/': HTTP #{@curb_instance.response_code}"
-      return @curb_instance
+    def archive(options) 
+      post_page(:archive, options)
     end
     
-    def mark_as_read(id) 
-      fields = [ PostField.content('messages', id), PostField.content('read', 1), PostField.content('_rnr_se', @_rnr_se)]
-      
-      @curb_instance.http_post(fields)
-      
-      @curb_instance.url = 'https://www.google.com/voice/inbox/mark/'
-
-      @curb_instance.perform
-      logger.info "FINISHED POST TO 'https://www.google.com//voice/inbox/mark/': HTTP #{@curb_instance.response_code}"
-      return @curb_instance
+    def mark_as_read(options) 
+      post_page(:mark_as_read, options)
     end
     
     def logout
@@ -108,10 +96,10 @@ module GvoiceRuby
         end
 
         fields = [ PostField.content('continue', options[:continue_url]), #'https://www.google.com/voice'
-             PostField.content('GALX', @galx),
-             PostField.content('service', options[:google_service]),
-             PostField.content('Email', options[:google_account_email]),
-             PostField.content('Passwd', options[:google_account_password]) ]
+                   PostField.content('GALX', @galx),
+                   PostField.content('service', options[:google_service]),
+                   PostField.content('Email', options[:google_account_email]),
+                   PostField.content('Passwd', options[:google_account_password]) ]
 
         # puts fields
         curl.http_post(fields)
@@ -130,6 +118,14 @@ module GvoiceRuby
                    PostField.content('forwardingNumber', options[:forwarding_number]),
                    PostField.content('subscriberNumber', 'undefined'),
                    PostField.content('remember', 0),
+                   PostField.content('_rnr_se', @_rnr_se) ]
+      when /archive/
+        fields = [ PostField.content('messages', options[:id]),
+                   PostField.content('archive', 1),
+                   PostField.content('_rnr_se', @_rnr_se) ]
+      when /mark_as_read/
+        fields = [ PostField.content('messages', options[:id]),
+                   PostField.content('read', 1),
                    PostField.content('_rnr_se', @_rnr_se) ]
       else
       end
@@ -154,96 +150,96 @@ module GvoiceRuby
       return @curb_instance
     end
     
-    def parse_page(page_obj)
-      doc = Nokogiri::XML.parse(page_obj.body_str)
-      
-      # p doc
-      
-      html_fragment = Nokogiri::HTML::DocumentFragment.parse(doc.to_html)
-      
-      # p html_fragment
-      
-      m = doc.css('json').first.to_s.scan(/CDATA\[(.+)\]\]/).flatten
-      
-      inbox = JSON.parse(m.first)
-      
-      get_unread_counts(inbox)
-      parse_sms_messages(inbox['messages'], html_fragment)
-      parse_voicemail_messages(inbox['messages'], html_fragment)
-      @all_messages = @smss | @voicemails
-      @all_messages.sort_by!(&:start_time)
-    end
-    
-    def parse_sms_messages(messages, page_fragment)
-      
-      messages.each do |txt|
-        if txt[1]['type'].to_i == 2
-          next
-        else
-          txt_obj = Sms.new
-          txt_obj.id                      = txt[0]
-          txt_obj.start_time              = txt[1]['startTime'].to_i
-          txt_obj.is_read                 = txt[1]['isRead']
-          txt_obj.display_start_time      = txt[1]['displayStartTime']
-          txt_obj.relative_start_time     = txt[1]['relativeStartTime']
-          txt_obj.display_number          = txt[1]['displayNumber']
-          txt_obj.display_start_date_time = txt[1]['displayStartDateTime']
-          txt_obj.labels                  = txt[1]['labels']
-          @smss << txt_obj
-          @smss.sort_by!(&:start_time) #if @smss.respond_to?(:sort_by!)
-        end
-      end
-      
-      @smss.each do |txt_obj|
-        page_fragment.css("div.gc-message-sms-row").each do |row|
-          if row.css('span.gc-message-sms-from').inner_html.strip! =~ /Me:/
-            next
-          elsif row.css('span.gc-message-sms-time').inner_html =~ Regexp.new(txt_obj.display_start_time)
-            txt_obj.to  = 'Me'
-            txt_obj.from = row.css('span.gc-message-sms-from').inner_html.strip!.gsub!(':', '')
-            txt_obj.text = row.css('span.gc-message-sms-text').inner_html
-            # txt_obj.time = row.css('span.gc-message-sms-time').inner_html
-          else
-            next
-          end
-        end
-      end
-      # p @smss
-    end
-  
-    def parse_voicemail_messages(messages, page_fragment)
-      # p messages
-      messages.each do |msg|
-        if msg[1]['type'].to_i == 2
-          vm_obj = Voicemail.new
-          vm_obj.id                      = msg[0]
-          vm_obj.start_time              = msg[1]['startTime'].to_i
-          vm_obj.is_read                 = msg[1]['isRead']
-          vm_obj.display_start_time      = msg[1]['displayStartTime']
-          vm_obj.relative_start_time     = msg[1]['relativeStartTime']
-          vm_obj.display_number          = msg[1]['displayNumber']
-          vm_obj.display_start_date_time = msg[1]['displayStartDateTime']
-          vm_obj.labels                  = msg[1]['labels']
-          @voicemails << vm_obj
-          @voicemails.sort_by!(&:start_time)
-        else
-          next
-        end
-      end
-      
-      @voicemails.each do |vm_obj|
-        page_fragment.css('table.gc-message-tbl').each do |row|
-          if row.css('span.gc-message-time').text =~ Regexp.new(vm_obj.display_start_date_time)
-            vm_obj.to         = 'Me'
-            vm_obj.from       = row.css('a.gc-under.gc-message-name-link').inner_html
-            vm_obj.transcript = row.css('div.gc-message-message-display').inner_text.to_s.gsub(/\n/, '').strip!
-            # vm_obj.time       = row.css('span.gc-message-time').inner_html
-          else
-            next
-          end
-        end
-      end
-    end
+    # def parse_page(page_obj)
+    #       doc = Nokogiri::XML.parse(page_obj.body_str)
+    #       
+    #       # p doc
+    #       
+    #       html_fragment = Nokogiri::HTML::DocumentFragment.parse(doc.to_html)
+    #       
+    #       # p html_fragment
+    #       
+    #       m = doc.css('json').first.to_s.scan(/CDATA\[(.+)\]\]/).flatten
+    #       
+    #       inbox = JSON.parse(m.first)
+    #       
+    #       get_unread_counts(inbox)
+    #       parse_sms_messages(inbox['messages'], html_fragment)
+    #       parse_voicemail_messages(inbox['messages'], html_fragment)
+    #       @all_messages = @smss | @voicemails
+    #       @all_messages.sort_by!(&:start_time)
+    #     end
+    #     
+    #     def parse_sms_messages(messages, page_fragment)
+    #       
+    #       messages.each do |txt|
+    #         if txt[1]['type'].to_i == 2
+    #           next
+    #         else
+    #           txt_obj = Sms.new
+    #           txt_obj.id                      = txt[0]
+    #           txt_obj.start_time              = txt[1]['startTime'].to_i
+    #           txt_obj.is_read                 = txt[1]['isRead']
+    #           txt_obj.display_start_time      = txt[1]['displayStartTime']
+    #           txt_obj.relative_start_time     = txt[1]['relativeStartTime']
+    #           txt_obj.display_number          = txt[1]['displayNumber']
+    #           txt_obj.display_start_date_time = txt[1]['displayStartDateTime']
+    #           txt_obj.labels                  = txt[1]['labels']
+    #           @smss << txt_obj
+    #           @smss.sort_by!(&:start_time) #if @smss.respond_to?(:sort_by!)
+    #         end
+    #       end
+    #       
+    #       @smss.each do |txt_obj|
+    #         page_fragment.css("div.gc-message-sms-row").each do |row|
+    #           if row.css('span.gc-message-sms-from').inner_html.strip! =~ /Me:/
+    #             next
+    #           elsif row.css('span.gc-message-sms-time').inner_html =~ Regexp.new(txt_obj.display_start_time)
+    #             txt_obj.to  = 'Me'
+    #             txt_obj.from = row.css('span.gc-message-sms-from').inner_html.strip!.gsub!(':', '')
+    #             txt_obj.text = row.css('span.gc-message-sms-text').inner_html
+    #             # txt_obj.time = row.css('span.gc-message-sms-time').inner_html
+    #           else
+    #             next
+    #           end
+    #         end
+    #       end
+    #       # p @smss
+    #     end
+    #   
+    #     def parse_voicemail_messages(messages, page_fragment)
+    #       # p messages
+    #       messages.each do |msg|
+    #         if msg[1]['type'].to_i == 2
+    #           vm_obj = Voicemail.new
+    #           vm_obj.id                      = msg[0]
+    #           vm_obj.start_time              = msg[1]['startTime'].to_i
+    #           vm_obj.is_read                 = msg[1]['isRead']
+    #           vm_obj.display_start_time      = msg[1]['displayStartTime']
+    #           vm_obj.relative_start_time     = msg[1]['relativeStartTime']
+    #           vm_obj.display_number          = msg[1]['displayNumber']
+    #           vm_obj.display_start_date_time = msg[1]['displayStartDateTime']
+    #           vm_obj.labels                  = msg[1]['labels']
+    #           @voicemails << vm_obj
+    #           @voicemails.sort_by!(&:start_time)
+    #         else
+    #           next
+    #         end
+    #       end
+    #       
+    #       @voicemails.each do |vm_obj|
+    #         page_fragment.css('table.gc-message-tbl').each do |row|
+    #           if row.css('span.gc-message-time').text =~ Regexp.new(vm_obj.display_start_date_time)
+    #             vm_obj.to         = 'Me'
+    #             vm_obj.from       = row.css('a.gc-under.gc-message-name-link').inner_html
+    #             vm_obj.transcript = row.css('div.gc-message-message-display').inner_text.to_s.gsub(/\n/, '').strip!
+    #             # vm_obj.time       = row.css('span.gc-message-time').inner_html
+    #           else
+    #             next
+    #           end
+    #         end
+    #       end
+    #     end
     
     def get_unread_counts(inbox)
       @unread_counts = inbox['unreadCounts']

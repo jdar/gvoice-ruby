@@ -8,7 +8,7 @@ class GvoiceRubyTest < Test::Unit::TestCase
   end
   
   should "have project root constant" do
-    assert_equal(File.expand_path(File.dirname(__FILE__) + '/..'), GvoiceRuby.const_get(:PROJECT_ROOT))
+    assert_equal(File.expand_path(File.dirname(__FILE__) + '/..'), GvoiceRuby::Configurator.const_get(:PROJECT_ROOT))
   end
   
   should "load configuration file" do
@@ -19,18 +19,18 @@ class GvoiceRubyTest < Test::Unit::TestCase
   
   should "write configuration file" do
     @config[:foo] = 'bar'
-    GvoiceRuby.write_config(@config, File.dirname(__FILE__) + '/fixtures/config_fixture.yml')
-    newly_loaded_config = GvoiceRuby.load_config(File.dirname(__FILE__) + '/fixtures/config_fixture.yml')
+    GvoiceRuby::Configurator.write_config(@config, File.dirname(__FILE__) + '/fixtures/config_fixture.yml')
+    newly_loaded_config = GvoiceRuby::Configurator.load_config(File.dirname(__FILE__) + '/fixtures/config_fixture.yml')
     assert_equal('bar', newly_loaded_config[:foo].to_s)
     @config.delete(:foo)
-    GvoiceRuby.write_config(@config, File.dirname(__FILE__) + '/fixtures/config_fixture.yml')
+    GvoiceRuby::Configurator.write_config(@config, File.dirname(__FILE__) + '/fixtures/config_fixture.yml')
   end
   
   should "raise IOError when config file not loaded" do
-    assert_raise(IOError) { GvoiceRuby.load_config('foo') }
+    assert_raise(IOError) { GvoiceRuby::Configurator.load_config('foo') }
   end
   
   should "raise IOError when config file not written" do
-    assert_raise(IOError) { GvoiceRuby.write_config(@config, 'foo') }
+    assert_raise(IOError) { GvoiceRuby::Configurator.write_config(@config, 'foo') }
   end
 end
