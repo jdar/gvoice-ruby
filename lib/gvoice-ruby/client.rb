@@ -58,6 +58,7 @@ module GvoiceRuby
     def call(options)
       fields = [ PostField.content('outgoingNumber', options[:outgoing_number]),
                  PostField.content('forwardingNumber', options[:forwarding_number]),
+                 PostField.content('phoneType', options[:phone_type]),
                  PostField.content('subscriberNumber', 'undefined'),
                  PostField.content('remember', 0),
                  PostField.content('_rnr_se', @_rnr_se) ]
