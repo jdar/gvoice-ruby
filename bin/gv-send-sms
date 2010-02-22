@@ -8,5 +8,5 @@ voicebox = GvoiceRuby::Client.new
 
 txt = {:phone_number => "3088721257", :text => "Testing sms from gvoice-ruby!" }
 
-puts "Message sent!" if voicebox.sms(txt)    
+puts "Message sent!" if voicebox.send_sms(txt)    
                   

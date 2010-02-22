@@ -6,7 +6,7 @@ module GvoiceRuby
   class Client
     include Curl
     
-    attr_accessor :page, :unread_counts, :start_times, :smss, :voicemails, :user, :all_messages
+    attr_accessor :unread_counts, :smss, :voicemails, :user, :all_messages
     attr_reader :logger
     
     def initialize(config = GvoiceRuby::Configurator.load_config)
@@ -16,7 +16,6 @@ module GvoiceRuby
         @logger        = Logger.new(File.join(File.dirname(__FILE__), '..', '..', 'log', 'gvoice-ruby.log'))
         @user          = User.new(config[:google_account_email], config[:google_account_password])
         @any_unread    = []
-        @start_times   = []
         @unread_counts = {}
         @all_messages  = []
         initialize_curb
@@ -44,7 +43,7 @@ module GvoiceRuby
       @all_messages.sort_by!(&:start_time)
     end
     
-    def sms(options)
+    def send_sms(options)
       fields = [ PostField.content('phoneNumber', options[:phone_number]),
                  PostField.content('text', options[:text]),
                  PostField.content('_rnr_se', @_rnr_se) ]
@@ -143,14 +142,11 @@ module GvoiceRuby
       options.merge!({ :post_url => 'https://www.google.com/accounts/ServiceLoginAuth' })
       
       post(options, fields)
-      # @curb_instance.perform
     end
     
     def post(options, fields)
       @curb_instance.url = options[:post_url] #"https://www.google.com/voice/call/connect || https://www.google.com/voice/sms/send"
       @curb_instance.http_post(fields)
-      
-      # @curb_instance.perform
       
       logger.info "FINISHED POST TO #{options[:post_url]}: HTTP #{@curb_instance.response_code}"
       return @curb_instance

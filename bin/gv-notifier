@@ -12,14 +12,6 @@ config = GvoiceRuby::Configurator.load_config
 jabber_bot = Jabber::Simple.new(config[:bot_name], config[:bot_password])
 
 voicebox = GvoiceRuby::Client.new
-                          
-# message_counts, start_times = voicebox.unread_counts, voicebox.start_times
-
-# message_counts.each { |count| p count } unless message_counts.empty?
-
-# p voicebox.all_messages
-# p voicebox.any_unread?
-# p voicebox.unread_counts
 
 voicebox.check
 
