@@ -14,3 +14,5 @@ voicebox = GvoiceRuby::Client.new
 this_phone = { :outgoing_number => "3088720071", :forwarding_number => "3088721257", :phone_type => 2 }
 
 puts "Call connected!" if voicebox.call(this_phone)
+
+puts "Call cancelled!" if voicebox.cancel_call

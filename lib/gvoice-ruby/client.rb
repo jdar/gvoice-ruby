@@ -66,6 +66,17 @@ module GvoiceRuby
       post(options, fields)
     end
     
+    def cancel_call(options = {})
+      fields = [ PostField.content('outgoingNumber', options[:outgoing_number] || 'undefined'),
+                 PostField.content('forwardingNumber', options[:forwarding_number] || 'undefined'),
+                 PostField.content('cancelType', 'C2C'),
+                 PostField.content('_rnr_se', @_rnr_se) ]
+                 
+      options.merge!({ :post_url => "https://www.google.com/voice/call/cancel" })
+      
+      post(options, fields)
+    end
+    
     def archive(options)
       fields = [ PostField.content('messages', options[:id]),
                  PostField.content('archive', 1),
