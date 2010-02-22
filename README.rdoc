@@ -46,7 +46,7 @@ Alternatively you can require 'rubygems' in your own script using the underlying
 
 3.) If the libraries used change it will break.
 
-4.) It is somewhat tightly coupled to the private post_page and fetch_page methods (sms and voicemail arrays depend upon these methods).
+4.) It is somewhat tightly coupled to the private post and fetch_page methods (sms and voicemail arrays depend upon these methods).
 
 5.) It is not RESTful in any way.
 

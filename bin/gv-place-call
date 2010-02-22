@@ -6,6 +6,6 @@ include GvoiceRuby
 
 voicebox = GvoiceRuby::Client.new
 
-this_phone = { :outgoing_number => "3088720071", :forwarding_number => "3088721257", :post_url => "https://www.google.com/voice/call/connect/" }
+this_phone = { :outgoing_number => "3088720071", :forwarding_number => "3088721257" }
 
-voicebox.call(this_phone)
+puts "Call connected!" if voicebox.call(this_phone)

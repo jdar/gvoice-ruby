@@ -6,7 +6,7 @@ include GvoiceRuby
 
 voicebox = GvoiceRuby::Client.new
 
-txt = {:phone_number => "3088721257", :text => "Testing sms from gvoice-ruby!", :post_url => "https://www.google.com/voice/sms/send"  }
+txt = {:phone_number => "3088721257", :text => "Testing sms from gvoice-ruby!" }
 
-voicebox.sms(txt)     
+puts "Message sent!" if voicebox.sms(txt)    
                   

@@ -15,13 +15,25 @@ module GvoiceRuby
       else          
         @logger        = Logger.new(File.join(File.dirname(__FILE__), '..', '..', 'log', 'gvoice-ruby.log'))
         @user          = User.new(config[:google_account_email], config[:google_account_password])
-        @curb_instance = login(config)
+        @curb_instance = Easy.new do |curl|
+          # Google gets mad if you don't fake this...
+          curl.headers["User-Agent"] = "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.5; en-US; rv:1.9.1.2) Gecko/20090729 Firefox/3.5.2"
+          # Let's see what happens under the hood
+          # curl.verbose = true
+
+          # Google will redirect us a bit
+          curl.follow_location = true
+
+          # Google will make sure we retain cookies
+          curl.enable_cookies = true
+        end
         @any_unread    = []
         @start_times   = []
         @unread_counts = {}
         @all_messages  = []
       end
       
+      login(config)
       set_rnr_se_token
     end
     
@@ -34,29 +46,89 @@ module GvoiceRuby
     end
     
     def sms(options)
-      post_page(:sms, options)
+      fields = [ PostField.content('phoneNumber', options[:phone_number]),
+                 PostField.content('text', options[:text]),
+                 PostField.content('_rnr_se', @_rnr_se) ]
+
+      options.merge!({ :post_url => "https://www.google.com/voice/sms/send" })
+
+      post(options, fields)
     end
     
     def call(options)
-      post_page(:call, options)
+      fields = [ PostField.content('outgoingNumber', options[:outgoing_number]),
+                 PostField.content('forwardingNumber', options[:forwarding_number]),
+                 PostField.content('subscriberNumber', 'undefined'),
+                 PostField.content('remember', 0),
+                 PostField.content('_rnr_se', @_rnr_se) ]
+      
+      options.merge!({ :post_url => "https://www.google.com/voice/call/connect" })
+                 
+      post(options, fields)
     end
     
     def check(parser = GvoiceRuby::InboxParser.new)
       inbox = parser.parse_page(fetch_page)
+      # y inbox
       
       get_unread_counts(inbox)
-      smss = parser.parse_sms_messages(inbox['messages'])
-      voicemails = parser.parse_voicemail_messages(inbox['messages'])
+      @smss = parser.parse_sms_messages(inbox['messages'])
+      # y smss
+      @voicemails = parser.parse_voicemail_messages(inbox['messages'])
+      # y smss
       @all_messages = smss | voicemails
+      # y @all_messages
       @all_messages.sort_by!(&:start_time)
     end
     
-    def archive(options) 
-      post_page(:archive, options)
+    def archive(options)
+      fields = [ PostField.content('messages', options[:id]),
+                 PostField.content('archive', 1),
+                 PostField.content('_rnr_se', @_rnr_se) ]
+                 
+      options.merge!({ :post_url => 'https://www.google.com/voice/inbox/mark'})
+                 
+      post(options, fields)
     end
     
-    def mark_as_read(options) 
-      post_page(:mark_as_read, options)
+    def mark_as_read(options)
+      fields = [ PostField.content('messages', options[:id]),
+                 PostField.content('read', 1),
+                 PostField.content('_rnr_se', @_rnr_se) ]
+                 
+      options.merge!({ :post_url => 'https://www.google.com/voice/inbox/mark'})
+                 
+      post(options, fields)
+    end
+    
+    def mark_as_unread(options)
+      fields = [ PostField.content('messages', options[:id]),
+                 PostField.content('read', 0),
+                 PostField.content('_rnr_se', @_rnr_se) ]
+                 
+      options.merge!({ :post_url => 'https://www.google.com/voice/inbox/mark'})
+                 
+      post(options, fields)
+    end
+    
+    def star(options)
+      fields = [ PostField.content('messages', options[:id]),
+                 PostField.content('star', 1),
+                 PostField.content('_rnr_se', @_rnr_se) ]
+                 
+      options.merge!({ :post_url => 'https://www.google.com/voice/inbox/star'})
+                 
+      post(options, fields)
+    end
+    
+    def unstar(options)
+      fields = [ PostField.content('messages', options[:id]),
+                 PostField.content('star', 0),
+                 PostField.content('_rnr_se', @_rnr_se) ]
+                 
+      options.merge!({ :post_url => 'https://www.google.com/voice/inbox/star'})
+                 
+      post(options, fields)
     end
     
     def logout
@@ -71,62 +143,26 @@ module GvoiceRuby
     
     private
     def login(options = {})
-      @curb_instance = Easy.new('https://www.google.com/accounts/ServiceLoginAuth') do |curl|
-        # Google gets mad if you don't fake this...
-        curl.headers["User-Agent"] = "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.5; en-US; rv:1.9.1.2) Gecko/20090729 Firefox/3.5.2"
-        # Let's see what happens under the hood
-        # curl.verbose = true
-
-        # Google will redirect us a bit
-        curl.follow_location = true
-
-        # Google will make sure we retain cookies
-        curl.enable_cookies = true
-
-        curl.perform
-        
-        defeat_google_xsrf(curl.body_str)
-
-        fields = [ PostField.content('continue', options[:continue_url]), #'https://www.google.com/voice'
-                   PostField.content('GALX', @galx),
-                   PostField.content('service', options[:google_service]),
-                   PostField.content('Email', options[:google_account_email]),
-                   PostField.content('Passwd', options[:google_account_password]) ]
-
-        # puts fields
-        curl.http_post(fields)
-      end
-    end
-    
-    def post_page(page_type, options)
-      # p @curb_instance.methods.sort
-      case page_type.id2name
-      when /sms/
-        fields = [ PostField.content('phoneNumber', options[:phone_number]),
-                   PostField.content('text', options[:text]),
-                   PostField.content('_rnr_se', @_rnr_se) ]
-      when /call/
-        fields = [ PostField.content('outgoingNumber', options[:outgoing_number]),
-                   PostField.content('forwardingNumber', options[:forwarding_number]),
-                   PostField.content('subscriberNumber', 'undefined'),
-                   PostField.content('remember', 0),
-                   PostField.content('_rnr_se', @_rnr_se) ]
-      when /archive/
-        fields = [ PostField.content('messages', options[:id]),
-                   PostField.content('archive', 1),
-                   PostField.content('_rnr_se', @_rnr_se) ]
-      when /mark_as_read/
-        fields = [ PostField.content('messages', options[:id]),
-                   PostField.content('read', 1),
-                   PostField.content('_rnr_se', @_rnr_se) ]
-      else
-      end
+      @curb_instance.url = 'https://www.google.com/accounts/ServiceLoginAuth'
+      @curb_instance.perform
+      
+      defeat_google_xsrf(@curb_instance.body_str)
+      
+      fields = [ PostField.content('continue', options[:continue_url]), #'https://www.google.com/voice'
+                 PostField.content('GALX', @galx),
+                 PostField.content('service', options[:google_service]),
+                 PostField.content('Email', options[:google_account_email]),
+                 PostField.content('Passwd', options[:google_account_password]) ]
       
       @curb_instance.http_post(fields)
-      
+      # @curb_instance.perform
+    end
+    
+    def post(options, fields)
       @curb_instance.url = options[:post_url] #"https://www.google.com/voice/call/connect || https://www.google.com/voice/sms/send"
+      @curb_instance.http_post(fields)
       
-      @curb_instance.perform
+      # @curb_instance.perform
       
       logger.info "FINISHED POST TO #{options[:post_url]}: HTTP #{@curb_instance.response_code}"
       return @curb_instance
@@ -174,8 +210,7 @@ module GvoiceRuby
     
     def extract_rnr_se(body_string)
       begin
-        Nokogiri::HTML::Document.parse(body_string).css('form#gc-search-form').inner_html
-        /value="(.+)"/.match(@_rnr_se)
+        /value="(.+)"/.match(Nokogiri::HTML::Document.parse(body_string).css('form#gc-search-form').inner_html)
         return $1
       rescue IOError
         raise IOError, "Problem extracting _rnr_se code from page."

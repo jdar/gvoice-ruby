@@ -23,7 +23,6 @@ module GvoiceRuby
     end
     
     def parse_sms_messages(messages, page_fragment = @html_fragment)
-      
       messages.each do |txt|
         if txt[1]['type'].to_i == 2
           next
@@ -57,6 +56,7 @@ module GvoiceRuby
         end
       end
       # p @smss
+      return @smss
     end
   
     def parse_voicemail_messages(messages, page_fragment = @html_fragment)

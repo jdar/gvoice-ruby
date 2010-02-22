@@ -30,6 +30,8 @@ if voicebox.any_unread?
   voicebox.smss.each do |t|
     if t.labels.include?('unread')
       sms_messages << "#{t.from} says: '#{t.text}' at #{t.display_start_date_time}\n"
+      voicebox.mark_as_read({:id => t.id})
+      voicebox.star({:id => t.id})
     else
       next
     end
