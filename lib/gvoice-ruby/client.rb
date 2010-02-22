@@ -15,22 +15,11 @@ module GvoiceRuby
       else          
         @logger        = Logger.new(File.join(File.dirname(__FILE__), '..', '..', 'log', 'gvoice-ruby.log'))
         @user          = User.new(config[:google_account_email], config[:google_account_password])
-        @curb_instance = Easy.new do |curl|
-          # Google gets mad if you don't fake this...
-          curl.headers["User-Agent"] = "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.5; en-US; rv:1.9.1.2) Gecko/20090729 Firefox/3.5.2"
-          # Let's see what happens under the hood
-          # curl.verbose = true
-
-          # Google will redirect us a bit
-          curl.follow_location = true
-
-          # Google will make sure we retain cookies
-          curl.enable_cookies = true
-        end
         @any_unread    = []
         @start_times   = []
         @unread_counts = {}
         @all_messages  = []
+        initialize_curb
       end
       
       login(config)
@@ -43,6 +32,16 @@ module GvoiceRuby
     
     def logged_in?
       !@curb_instance.nil?
+    end
+    
+    def check(parser = GvoiceRuby::InboxParser.new)
+      inbox = parser.parse_page(fetch_page)
+      
+      get_unread_counts(inbox)
+      @smss = parser.parse_sms_messages(inbox['messages'])
+      @voicemails = parser.parse_voicemail_messages(inbox['messages'])
+      @all_messages = smss | voicemails
+      @all_messages.sort_by!(&:start_time)
     end
     
     def sms(options)
@@ -66,20 +65,6 @@ module GvoiceRuby
       options.merge!({ :post_url => "https://www.google.com/voice/call/connect" })
                  
       post(options, fields)
-    end
-    
-    def check(parser = GvoiceRuby::InboxParser.new)
-      inbox = parser.parse_page(fetch_page)
-      # y inbox
-      
-      get_unread_counts(inbox)
-      @smss = parser.parse_sms_messages(inbox['messages'])
-      # y smss
-      @voicemails = parser.parse_voicemail_messages(inbox['messages'])
-      # y smss
-      @all_messages = smss | voicemails
-      # y @all_messages
-      @all_messages.sort_by!(&:start_time)
     end
     
     def archive(options)
@@ -155,7 +140,9 @@ module GvoiceRuby
                  PostField.content('Email', options[:google_account_email]),
                  PostField.content('Passwd', options[:google_account_password]) ]
       
-      @curb_instance.http_post(fields)
+      options.merge!({ :post_url => 'https://www.google.com/accounts/ServiceLoginAuth' })
+      
+      post(options, fields)
       # @curb_instance.perform
     end
     
@@ -215,6 +202,21 @@ module GvoiceRuby
         return $1
       rescue IOError
         raise IOError, "Problem extracting _rnr_se code from page."
+      end
+    end
+    
+    def initialize_curb
+      @curb_instance = Easy.new do |curl|
+        # Google gets mad if you don't fake this...
+        curl.headers["User-Agent"] = "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.5; en-US; rv:1.9.1.2) Gecko/20090729 Firefox/3.5.2"
+        # Let's see what happens under the hood
+        # curl.verbose = true
+
+        # Google will redirect us a bit
+        curl.follow_location = true
+
+        # Google will make sure we retain cookies
+        curl.enable_cookies = true
       end
     end
   end
