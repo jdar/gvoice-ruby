@@ -14,7 +14,7 @@ module GvoiceRuby
           raise IOError
         end
       rescue IOError
-        STDERR.puts "Failed to open file #{config_file}.\nFile doesn't seem to exist. (#{$!})"
+        STDERR.puts "Failed to open file #{File.expand_path(config_file)} for reading. File doesn't seem to exist. (#{$!})"
         raise
       end
       return config_hash
@@ -31,7 +31,7 @@ module GvoiceRuby
           raise IOError
         end
       rescue IOError
-        STDERR.puts "#{config_file} doesn't exist: (#{$!})"
+        STDERR.puts "Failed to open #{File.expand_path(config_file)} for writing.  File doesn't seem to exist: (#{$!})"
         raise
       end
     end

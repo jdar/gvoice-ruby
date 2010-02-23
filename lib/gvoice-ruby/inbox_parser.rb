@@ -84,7 +84,7 @@ module GvoiceRuby
           if row.css('span.gc-message-time').text =~ Regexp.new(vm_obj.display_start_date_time)
             vm_obj.to         = 'Me'
             vm_obj.from       = row.css('a.gc-under.gc-message-name-link').inner_html
-            vm_obj.transcript = row.css('div.gc-message-message-display').inner_text.to_s.gsub(/\n/, '').strip!
+            vm_obj.transcript = row.css('div.gc-message-message-display').inner_text.to_s.gsub(/\n/, "").squeeze(" ").strip!
             # vm_obj.time       = row.css('span.gc-message-time').inner_html
           else
             next

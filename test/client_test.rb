@@ -1,5 +1,5 @@
 # coding: utf-8
-require File.expand_path(File.dirname(__FILE__) + "/../test/test_helper")
+require File.dirname(__FILE__) + "/test_helper"
 require 'gvoice-ruby/client'
 require 'gvoice-ruby/user'
 require 'gvoice-ruby'

@@ -31,7 +31,7 @@ if voicebox.any_unread?
   
   voicebox.voicemails.each do |v|
     if v.labels.include?('unread')
-      voicemail_messages << "Voicemail from #{v.from} at #{v.display_start_date_time}:\n#{v.transcript}"
+      voicemail_messages << "Voicemail from #{v.from} at #{v.display_start_date_time}:\n#{v.transcript}\n"
     else
       next
     end
