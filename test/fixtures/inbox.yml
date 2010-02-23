@@ -1,0 +1,206 @@
+--- 
+messages: 
+  c6abad9419d82dfe8396b00771fa74d6636f4cf0: 
+    isSpam: false
+    isRead: true
+    displayStartTime: 5:28 PM
+    displayNumber: (555) 555-5555
+    relativeStartTime: 3 days ago
+    phoneNumber: "+15555555555"
+    id: c6abad9419d82dfe8396b00771fa74d6636f4cf0
+    type: 10
+    star: false
+    isTrash: false
+    note: ""
+    displayStartDateTime: 2/19/10 5:28 PM
+    startTime: "1266622094675"
+    children: ""
+    labels: 
+    - inbox
+    - sms
+    - all
+  cbcdfac3c081607cd1588dc294fe00fe34d617de: 
+    isSpam: false
+    isRead: true
+    displayStartTime: 7:38 AM
+    displayNumber: (555) 555-5555
+    relativeStartTime: 4 days ago
+    phoneNumber: "+15555555555"
+    id: cbcdfac3c081607cd1588dc294fe00fe34d617de
+    type: 10
+    star: false
+    isTrash: false
+    note: ""
+    displayStartDateTime: 2/19/10 7:38 AM
+    startTime: "1266586686797"
+    children: ""
+    labels: 
+    - inbox
+    - sms
+    - all
+  0fcaa4e5ed97beedf9ee6301343a6cbafc97fe50: 
+    isSpam: false
+    isRead: true
+    displayStartTime: 4:20 PM
+    displayNumber: (555) 555-5555
+    relativeStartTime: 2 days ago
+    phoneNumber: "+15555555555"
+    id: 0fcaa4e5ed97beedf9ee6301343a6cbafc97fe50
+    type: 10
+    star: false
+    isTrash: false
+    note: ""
+    displayStartDateTime: 2/20/10 4:20 PM
+    startTime: "1266704456578"
+    children: ""
+    labels: 
+    - inbox
+    - sms
+    - all
+  64889074992f75f1dd4e6bc1950ef1de17345151: 
+    isSpam: false
+    isRead: true
+    displayStartTime: 11:36 AM
+    displayNumber: (555) 555-5555
+    relativeStartTime: 6 days ago
+    phoneNumber: "+15555555555"
+    id: 64889074992f75f1dd4e6bc1950ef1de17345151
+    type: 10
+    star: false
+    isTrash: false
+    note: ""
+    displayStartDateTime: 2/17/10 11:36 AM
+    startTime: "1266428177718"
+    children: ""
+    labels: 
+    - inbox
+    - sms
+    - all
+  28d989bcd117827a9bc1052c382bfd2b9257ea4e: 
+    isSpam: false
+    isRead: true
+    displayStartTime: 9:18 AM
+    displayNumber: (555) 555-5555
+    relativeStartTime: 5 hours ago
+    phoneNumber: "+15555555555"
+    id: 28d989bcd117827a9bc1052c382bfd2b9257ea4e
+    type: 10
+    star: false
+    isTrash: false
+    note: ""
+    displayStartDateTime: 2/23/10 9:18 AM
+    startTime: "1266938315278"
+    children: ""
+    labels: 
+    - inbox
+    - sms
+    - all
+  5090a19706f95fb33066ca661e15731e39ac4ed9: 
+    isSpam: false
+    isRead: true
+    displayStartTime: 2:20 PM
+    displayNumber: (555) 555-5555
+    relativeStartTime: 5 days ago
+    phoneNumber: "+15555555555"
+    id: 5090a19706f95fb33066ca661e15731e39ac4ed9
+    type: 10
+    star: false
+    isTrash: false
+    note: ""
+    displayStartDateTime: 2/18/10 2:20 PM
+    startTime: "1266524404778"
+    children: ""
+    labels: 
+    - inbox
+    - sms
+    - all
+  3d5a9ada717f976e2281dc0d8dcab2a94fc21bf6: 
+    isSpam: false
+    isRead: true
+    displayStartTime: 3:49 PM
+    displayNumber: (555) 555-5555
+    relativeStartTime: 46 hours ago
+    phoneNumber: "+15555555555"
+    id: 3d5a9ada717f976e2281dc0d8dcab2a94fc21bf6
+    type: 10
+    star: false
+    isTrash: false
+    note: ""
+    displayStartDateTime: 2/21/10 3:49 PM
+    startTime: "1266788989428"
+    children: ""
+    labels: 
+    - inbox
+    - sms
+    - all
+  e2326066e1606316299dc2bc26c9991865675b52: 
+    isSpam: false
+    isRead: true
+    displayStartTime: 9:12 AM
+    displayNumber: (555) 555-5555
+    relativeStartTime: 3 days ago
+    phoneNumber: "+15555555555"
+    id: e2326066e1606316299dc2bc26c9991865675b52
+    type: 2
+    star: false
+    isTrash: false
+    note: ""
+    displayStartDateTime: 2/20/10 9:12 AM
+    startTime: "1266678734000"
+    children: ""
+    labels: 
+    - inbox
+    - voicemail
+    - all
+  23bf4133c9338662977679b8f850b2dc6b7441b4: 
+    isSpam: false
+    isRead: true
+    displayStartTime: 8:02 PM
+    displayNumber: (555) 555-5555
+    relativeStartTime: 18 hours ago
+    phoneNumber: "+15555555555"
+    id: 23bf4133c9338662977679b8f850b2dc6b7441b4
+    type: 10
+    star: false
+    isTrash: false
+    note: ""
+    displayStartDateTime: 2/22/10 8:02 PM
+    startTime: "1266890573024"
+    children: ""
+    labels: 
+    - inbox
+    - sms
+    - all
+  f644b96d5f643f930e7ecd0300fc8a91ea96357d: 
+    isSpam: false
+    isRead: true
+    displayStartTime: 6:08 PM
+    displayNumber: (555) 555-5555
+    relativeStartTime: 20 hours ago
+    phoneNumber: "+15555555555"
+    id: f644b96d5f643f930e7ecd0300fc8a91ea96357d
+    type: 2
+    star: false
+    isTrash: false
+    note: ""
+    displayStartDateTime: 2/22/10 6:08 PM
+    startTime: "1266883686000"
+    children: ""
+    labels: 
+    - inbox
+    - voicemail
+    - all
+unreadCounts: 
+  all: 0
+  starred: 0
+  sms: 0
+  unread: 0
+  trash: 0
+  recorded: 0
+  received: 0
+  inbox: 0
+  placed: 0
+  missed: 0
+  voicemail: 0
+resultsPerPage: 10
+totalSize: 309

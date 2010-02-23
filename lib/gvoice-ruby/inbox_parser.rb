@@ -14,7 +14,7 @@ module GvoiceRuby
       
       @html_fragment = Nokogiri::HTML::DocumentFragment.parse(doc.to_html)
       
-      # p html_fragment
+      # p @html_fragment
       
       m = doc.css('json').first.to_s.scan(/CDATA\[(.+)\]\]/).flatten
       
