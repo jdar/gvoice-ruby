@@ -127,6 +127,25 @@ module GvoiceRuby
       post(options, fields)
     end
     
+    def add_note(options)
+      fields = [ PostField.content('id', options[:id]),
+                 PostField.content('note', options[:note]),
+                 PostField.content('_rnr_se', @_rnr_se) ]
+                 
+      options.merge!({ :post_url => 'https://www.google.com/voice/inbox/savenote'})
+      
+      post(options, fields)
+    end
+    
+    def delete_note(options)
+      fields = [ PostField.content('id', options[:id]),
+                 PostField.content('_rnr_se', @_rnr_se) ]
+                 
+      options.merge!({ :post_url => 'https://www.google.com/voice/inbox/deletenote'})
+      
+      post(options, fields)
+    end
+    
     def logout
       if logged_in?
         @curb_instance.url = "https://www.google.com/voice/account/signout"

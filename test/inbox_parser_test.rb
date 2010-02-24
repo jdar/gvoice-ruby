@@ -16,6 +16,12 @@ class InboxParserTest < Test::Unit::TestCase
     assert true
   end
   
+  should "create instance variables" do
+    ibp = GvoiceRuby::InboxParser.new
+    assert_equal([], ibp.instance_variable_get(:@smss))
+    assert_equal([], ibp.instance_variable_get(:@voicemails))    
+  end
+  
   should "parse the page" do
     GvoiceRuby::Client.any_instance.stubs(:fetch_page).returns(true)
     inbox = GvoiceRuby::InboxParser.new.parse_page(@page_obj)
