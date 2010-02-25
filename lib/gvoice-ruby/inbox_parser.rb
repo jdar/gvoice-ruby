@@ -3,8 +3,9 @@ module GvoiceRuby
   class InboxParser
     
     def initialize
-      @smss          = []
-      @voicemails    = []
+      @smss       = []
+      @voicemails = []
+      @calls      = []
     end
     
     def parse_page(page_obj)
@@ -91,6 +92,42 @@ module GvoiceRuby
           end
         end
       end
+    end
+  
+    def parse_calls(messages, page_fragment = @html_fragment)
+      messages.each do |msg|
+        if msg[1]['type'].to_i == 0
+          call_obj                         = Call.new
+          call_obj.id                      = msg[0]
+          call_obj.start_time              = msg[1]['startTime'].to_i
+          call_obj.is_read                 = msg[1]['isRead']
+          call_obj.display_start_time      = msg[1]['displayStartTime']
+          call_obj.relative_start_time     = msg[1]['relativeStartTime']
+          call_obj.display_number          = msg[1]['displayNumber']
+          call_obj.display_start_date_time = msg[1]['displayStartDateTime']
+          call_obj.labels                  = msg[1]['labels']
+
+          @calls << call_obj
+          @calls.sort_by!(&:start_time)
+        else
+          next
+        end
+      end
+      
+      @calls.each do |call_obj|
+        page_fragment.css('table.gc-message-tbl').each do |row|
+          if row.css('span.gc-message-time').text =~ Regexp.new(call_obj.display_start_date_time)
+            call_obj.to           = 'Me'
+            call_obj.from         = call_obj.display_number
+            # call_obj.from       = row.css('a.gc-under.gc-message-name-link').inner_html
+            # call_obj.transcript = row.css('div.gc-message-message-display').inner_text.to_s.gsub(/\n/, "").squeeze(" ").strip!
+            # call_obj.time       = row.css('span.gc-message-time').inner_html
+          else
+            next
+          end
+        end
+      end
+      return @calls
     end
   end
 end

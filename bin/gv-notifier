@@ -15,6 +15,12 @@ voicebox = GvoiceRuby::Client.new
 
 voicebox.check
 
+voicebox.missed.each do |call|
+  if DateTime.parse(call.display_start_date_time).yday >= (Time.now.yday - 3)
+    puts "You missed a call from #{call.from} on #{call.display_start_date_time}."
+  end
+end
+
 if voicebox.any_unread?
   sms_messages = []
   voicemail_messages = []

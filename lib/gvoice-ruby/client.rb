@@ -1,12 +1,12 @@
 # coding: UTF-8
 $:.unshift(File.dirname(__FILE__))
-%w[curb nokogiri json sms voicemail user logger compatibility inbox_parser open-uri].each { |lib| require lib }
+%w[curb nokogiri json sms voicemail call user logger compatibility inbox_parser open-uri].each { |lib| require lib }
 
 module GvoiceRuby
   class Client
     include Curl
     
-    attr_accessor :unread_counts, :smss, :voicemails, :user, :all_messages
+    attr_accessor :unread_counts, :smss, :voicemails, :user, :all_messages, :calls
     attr_reader :logger
     
     def initialize(config = GvoiceRuby::Configurator.load_config)
@@ -43,6 +43,11 @@ module GvoiceRuby
       @all_messages.sort_by!(&:start_time)
     end
     
+    def missed(parser = GvoiceRuby::InboxParser.new)
+      inbox = parser.parse_page(fetch_page('https://www.google.com/voice/inbox/recent/missed/'))
+      parser.parse_calls(inbox['messages'])
+    end
+    
     def send_sms(options)
       fields = [ PostField.content('phoneNumber', options[:phone_number]),
                  PostField.content('text', options[:text]),
@@ -56,7 +61,7 @@ module GvoiceRuby
     def call(options)
       fields = [ PostField.content('outgoingNumber', options[:outgoing_number]),
                  PostField.content('forwardingNumber', options[:forwarding_number]),
-                 PostField.content('phoneType', options[:phone_type]),
+                 PostField.content('phoneType', options[:phone_type] || 2),
                  PostField.content('subscriberNumber', 'undefined'),
                  PostField.content('remember', 0),
                  PostField.content('_rnr_se', @_rnr_se) ]
