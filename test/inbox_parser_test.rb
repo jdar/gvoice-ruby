@@ -28,4 +28,17 @@ class InboxParserTest < Test::Unit::TestCase
     assert_equal(Hash, inbox.class)
     assert_equal(@inbox_fixture, inbox)
   end
+  
+  should "parse sms messages" do
+    GvoiceRuby::Client.any_instance.stubs(:fetch_page).returns(true)
+    parser = GvoiceRuby::InboxParser.new
+    inbox = parser.parse_page(@page_obj)
+    parser.parse_sms_messages(inbox['messages'])
+    assert_equal(parser.instance_variable_get(:@smss)[0].class, GvoiceRuby::Sms)
+    assert_equal(parser.instance_variable_get(:@voicemails), [])
+    # y parser.parse_sms_messages(inbox['messages'])
+    # y parser.instance_variable_get(:@smss)
+  end
+  
+  
 end
