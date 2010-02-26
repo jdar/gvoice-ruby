@@ -48,6 +48,11 @@ module GvoiceRuby
       parser.parse_calls(inbox['messages'])
     end
     
+    def received(parser = GvoiceRuby::InboxParser.new)
+      inbox = parser.parse_page(fetch_page('https://www.google.com/voice/inbox/recent/received/'))
+      parser.parse_calls(inbox['messages'])
+    end
+    
     def send_sms(options)
       fields = [ PostField.content('phoneNumber', options[:phone_number]),
                  PostField.content('text', options[:text]),

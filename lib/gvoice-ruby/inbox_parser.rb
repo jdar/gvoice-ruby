@@ -56,8 +56,6 @@ module GvoiceRuby
           end
         end
       end
-      # p @smss
-      return @smss
     end
   
     def parse_voicemail_messages(messages, page_fragment = @html_fragment)
@@ -96,22 +94,18 @@ module GvoiceRuby
   
     def parse_calls(messages, page_fragment = @html_fragment)
       messages.each do |msg|
-        if msg[1]['type'].to_i == 0
-          call_obj                         = Call.new
-          call_obj.id                      = msg[0]
-          call_obj.start_time              = msg[1]['startTime'].to_i
-          call_obj.is_read                 = msg[1]['isRead']
-          call_obj.display_start_time      = msg[1]['displayStartTime']
-          call_obj.relative_start_time     = msg[1]['relativeStartTime']
-          call_obj.display_number          = msg[1]['displayNumber']
-          call_obj.display_start_date_time = msg[1]['displayStartDateTime']
-          call_obj.labels                  = msg[1]['labels']
-
-          @calls << call_obj
-          @calls.sort_by!(&:start_time)
-        else
-          next
-        end
+        call_obj                         = Call.new
+        call_obj.id                      = msg[0]
+        call_obj.start_time              = msg[1]['startTime'].to_i
+        call_obj.is_read                 = msg[1]['isRead']
+        call_obj.display_start_time      = msg[1]['displayStartTime']
+        call_obj.relative_start_time     = msg[1]['relativeStartTime']
+        call_obj.display_number          = msg[1]['displayNumber']
+        call_obj.display_start_date_time = msg[1]['displayStartDateTime']
+        call_obj.labels                  = msg[1]['labels']
+        
+        @calls << call_obj
+        @calls.sort_by!(&:start_time)
       end
       
       @calls.each do |call_obj|
@@ -127,7 +121,6 @@ module GvoiceRuby
           end
         end
       end
-      return @calls
     end
   end
 end
