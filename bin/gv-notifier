@@ -20,12 +20,21 @@ voicebox.missed.each do |call|
     puts "You missed a call from #{call.from} on #{call.display_start_date_time}."
   end
 end
+  puts "\n"
 
 voicebox.received.each do |call|
   if DateTime.parse(call.display_start_date_time).yday >= (Time.now.yday - 1)
     puts "You received a call from #{call.from} on #{call.display_start_date_time}."
   end
 end
+  puts "\n"
+
+voicebox.placed.each do |call|
+  if DateTime.parse(call.display_start_date_time).yday >= (Time.now.yday - 3)
+    puts "You placed a call to #{call.from} on #{call.display_start_date_time}."
+  end
+end
+  puts "\n"
 
 if voicebox.any_unread?
   sms_messages = []
