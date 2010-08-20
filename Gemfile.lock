@@ -1,0 +1,30 @@
+GIT
+  remote: http://github.com/davidjrice/xmpp4r-simple.git
+  revision: 92e2cd0
+  specs:
+    xmpp4r-simple (0.8.8)
+      xmpp4r (>= 0.3.2)
+
+GEM
+  remote: http://rubygems.org/
+  specs:
+    curb (0.7.8)
+    json (1.4.6)
+    mocha (0.9.8)
+      rake
+    nokogiri (1.4.3.1)
+    rake (0.8.7)
+    shoulda (2.11.3)
+    xmpp4r (0.5)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  bundler
+  curb
+  json
+  mocha
+  nokogiri
+  shoulda
+  xmpp4r-simple!

@@ -5,7 +5,7 @@ source :gemcutter
 gem 'curb'
 gem 'nokogiri'
 gem 'json'
-gem 'thoughtbot-shoulda'
+gem 'shoulda'
 gem 'mocha'
-gem 'xmpp4r-simple'
+gem 'xmpp4r-simple', :git => "http://github.com/davidjrice/xmpp4r-simple.git"
 gem 'bundler' 
