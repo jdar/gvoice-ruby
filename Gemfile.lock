@@ -21,7 +21,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  bundler
   curb
   json
   mocha

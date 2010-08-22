@@ -1,11 +1,12 @@
 # A sample Gemfile
-source :gemcutter
+source "http://rubygems.org"
 #
-# gem "rails"
 gem 'curb'
 gem 'nokogiri'
 gem 'json'
-gem 'shoulda'
-gem 'mocha'
 gem 'xmpp4r-simple', :git => "http://github.com/davidjrice/xmpp4r-simple.git"
-gem 'bundler' 
+
+group :test do
+  gem 'shoulda'
+  gem 'mocha'
+end

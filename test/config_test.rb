@@ -1,4 +1,4 @@
-# coding: utf-8
+# -*- encoding: utf-8 -*-
 require File.dirname(__FILE__) + "/test_helper"
  
 class ConfigTest < Test::Unit::TestCase
@@ -28,10 +28,16 @@ class ConfigTest < Test::Unit::TestCase
   end
   
   should "raise IOError when config file not loaded" do
-    assert_raise(IOError) { GvoiceRuby::Configurator.load_config('foo') }
+    begin
+      assert_raise(IOError) { GvoiceRuby::Configurator.load_config('foo') }
+    rescue StandardError
+    end
   end
   
   should "raise IOError when config file not written" do
-    assert_raise(IOError) { GvoiceRuby::Configurator.write_config(@config, 'foo') }
+    begin
+      assert_raise(IOError) { GvoiceRuby::Configurator.write_config(@config, 'foo') }
+    rescue StandardError
+    end
   end
 end

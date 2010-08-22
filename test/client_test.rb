@@ -1,4 +1,4 @@
-# coding: utf-8
+# -*- encoding: utf-8 -*-
 require File.dirname(__FILE__) + "/test_helper"
 require 'gvoice-ruby/client'
 require 'gvoice-ruby/user'

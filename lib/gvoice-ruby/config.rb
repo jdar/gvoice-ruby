@@ -1,5 +1,5 @@
-# coding: UTF-8
-$:.unshift(File.dirname(__FILE__))
+# -*- encoding: utf-8 -*-
+# $:.unshift(File.dirname(__FILE__))
 
 module GvoiceRuby
   class Configurator

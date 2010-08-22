@@ -1,8 +1,10 @@
-# coding: utf-8
-
+# -*- encoding: utf-8 -*-
 require 'test/unit'
-require 'shoulda'
-
+begin
+  require 'shoulda'
+rescue LoadError
+  warn "\nYou need to run 'bundle exec rake test' in order to avoid load errors.\n"
+end
 # $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 # $LOAD_PATH.unshift(File.dirname(__FILE__))
 require 'gvoice-ruby'

@@ -1,4 +1,4 @@
-# coding: UTF-8
+# -*- encoding: utf-8 -*-
 $:.unshift(File.dirname(__FILE__))
 %w[curb nokogiri json sms voicemail call user logger compatibility inbox_parser open-uri].each { |lib| require lib }
 
