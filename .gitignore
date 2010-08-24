@@ -1,2 +1,3 @@
+.DS_Store
 *.log
 gvoice-ruby-config.yml

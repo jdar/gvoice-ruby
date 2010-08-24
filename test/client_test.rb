@@ -1,4 +1,5 @@
 # -*- encoding: utf-8 -*-
+$:.unshift "./" # Ruby 1.9.2 does not include current directory in the path
 require File.dirname(__FILE__) + "/test_helper"
 require 'gvoice-ruby/client'
 require 'gvoice-ruby/user'
