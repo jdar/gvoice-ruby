@@ -47,6 +47,8 @@ Please see the bin/ directory for examples of using the library to accomplish so
 
 2.) It does some wicked monkeypatching to run on both 1.9.2 and 1.8.7 mostly due to the new Date class in Ruby 1.9.2.
 
+3.) It is technically a library but it doesn't document any sort of API thus far.
+
 == BUGS
 
 1.) It has few tests.
