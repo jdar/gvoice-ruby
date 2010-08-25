@@ -13,11 +13,6 @@ However, you should be able to run bundle install after running git clone as out
 1.) Ruby 1.8.7 or 1.9.2
 
 2.) Bundler 1.0 (gem install bundler --pre)
-<!-- 1.) The Curb library (gem install curb) -->
-
-<!-- 2.) The Nokogiri library (gem install nokogiri) -->
-
-<!-- 3.) The JSON library (gem install json) -->
 
 == Installing
 
@@ -51,10 +46,6 @@ Please see the bin/ directory for examples of using the library to accomplish so
 1.) You have to run 'bundle exec bin/"command"' and it must be run in the context of the gvoice-ruby directory.
 
 2.) It does some wicked monkeypatching to run on both 1.9.2 and 1.8.7 mostly due to the new Date class in Ruby 1.9.2.
-
-<!-- The library tries not to require 'rubygems' per http://gist.github.com/54177 and thus works fine on 1.9.2 but breaks on 1.8.7 unless you invoke any of the scripts with ruby -rubygems [whatever...] or set your RUBYOPT environment variable as noted above.  
-
-Alternatively you can require 'rubygems' in your own script using the underlying library or set your $RUBYOPT environment variable as outlined in the gist above, but keep this issue in mind. -->
 
 == BUGS
 
