@@ -20,11 +20,6 @@ EOS
   s.add_dependency "curb", "~> 0.7.8"
   s.add_dependency "nokogiri", "~> 1.4.3.1"
   s.add_dependency "json", "~> 1.4.6"
-  if RUBY_VERSION < '1.9'
-    s.add_dependency "xmpp4r-simple", "= 0.8.8"
-  else
-    s.add_dependency "scashin133-xmpp4r-simple", "= 0.8.9"
-  end
 
   s.add_development_dependency "bundler", "~> 1.0.0.rc.6"
   s.add_development_dependency "mocha",  "~> 0.9.7"

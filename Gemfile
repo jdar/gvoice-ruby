@@ -4,7 +4,9 @@ source "http://rubygems.org"
 gem 'curb'
 gem 'nokogiri'
 gem 'json'
-# gem 'xmpp4r-simple', :git => "http://github.com/davidjrice/xmpp4r-simple.git"
+
+# Make sure the correct version of xmpp4r-simple is loaded when
+# require is called in bin/gv-notifier
 if RUBY_VERSION < '1.9'
   gem 'xmpp4r-simple', "= 0.8.8"
 else
