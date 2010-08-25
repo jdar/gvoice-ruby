@@ -68,7 +68,7 @@ Alternatively you can require 'rubygems' in your own script using the underlying
 
 5.) It is not RESTful in any way.
 
-6.) It cannot yet cancel calls, but it can initiate them.
+6.) It cannot yet cancel calls very well, but it can initiate them.
 
 7.) It is my first attempt at writing a library and is not idiomatic ruby.
 
