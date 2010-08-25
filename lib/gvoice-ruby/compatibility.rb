@@ -1,6 +1,34 @@
 # -*- encoding: utf-8 -*-
+if RUBY_VERSION > '1.9'
+  module GvoiceRuby
+    class Call
+     alias_method :orig_display_start_date_time, :display_start_date_time 
+     
+     def display_start_date_time # New Date class in Ruby 1.9.2 only accepts strictly formatted strings Date.parse
+      if self.send(:caller).first.include?('inbox_parser')
+        orig_display_start_date_time
+      else
+        # Capture the original date string and parse into month, day, year variables
+        # warn "#{self.send(:caller)}"
+      
+        orig_display_start_date_time.match(/^(\d)\/(\d{1,2})\/(\d{2})\s(.+)\z/)
+        # month = $1
+        # day   = $2
+        year  = "20" + $3
+        # warn "Month is: #{month}\nDay is: #{day}\nYear is: #{year}"
+        "#{year}-#{$1}-#{$2} #{$4}"
+      end
+     end
+    end
+  end
+end
 
 if RUBY_VERSION < '1.9'
+  # String.instance_eval do
+  #   define_method(:force_encoding) { self } unless method_defined?(:force_encoding)
+  #   define_method(:encoding) { "UTF-8" } unless method_defined?(:encoding)
+  # end
+  
   class Symbol
     def to_proc
       proc { |obj, *args| obj.send(self, *args) }

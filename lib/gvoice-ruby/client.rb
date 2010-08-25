@@ -175,6 +175,8 @@ module GvoiceRuby
     def login(options = {})
       @curb_instance.url = 'https://www.google.com/accounts/ServiceLoginAuth'
       @curb_instance.perform
+      # If String#force_encoding doesn't exist we are on Ruby 1.8 and we shouldn't encode anything
+      @curb_instance.body_str.force_encoding("UTF-8") if @curb_instance.body_str.respond_to?(:force_encoding)
       
       defeat_google_xsrf(@curb_instance.body_str)
       
@@ -217,9 +219,8 @@ module GvoiceRuby
       # defeat Google's XSRF protection
       doc = Nokogiri::HTML::DocumentFragment.parse(body_string)
       doc.css('div.loginBox table#gaia_table input').each do |input|
-        if input.to_s =~ /GALX/
-          @galx = input.to_s.scan(/value\="(.+?)"/).flatten!.pop
-          # p @galx
+        if input.to_s =~ /GALX/u
+          @galx = input.to_s.scan(/value\="(.+?)"/u).flatten!.pop
         else
           next
           # raise IOError, 'Cannot fetch galx attribute from Google.'
