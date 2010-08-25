@@ -13,7 +13,8 @@ module GvoiceRuby
       if config[:google_account_email].nil? || config[:google_account_password].nil?
         raise ArgumentError, "Invalid Google Account username or password provided."
       else          
-        @logger        = Logger.new(File.join(File.dirname(__FILE__), '..', '..', 'log', 'gvoice-ruby.log'))
+        @logger        = Logger.new(config.has_key?(:logfile) ? config[:logfile] :
+                                      File.join(File.dirname(__FILE__), '..', '..', 'log', 'gvoice-ruby.log'))
         @user          = User.new(config[:google_account_email], config[:google_account_password])
         @any_unread    = []
         @unread_counts = {}
