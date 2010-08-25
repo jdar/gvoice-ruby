@@ -8,3 +8,4 @@
 :bot_password: your_gtalk_bot_password
 :google_voice_feed_url: https://www.google.com/voice/inbox/recent
 :google_account_email: your_google_email_address@gmail.com
+:logfile: path/to/log/file
