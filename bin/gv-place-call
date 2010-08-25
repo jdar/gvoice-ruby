@@ -2,7 +2,6 @@
 # -*- encoding: utf-8 -*-
 $:.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 require 'gvoice-ruby'
-include GvoiceRuby
 
 voicebox = GvoiceRuby::Client.new
 

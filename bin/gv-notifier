@@ -4,8 +4,6 @@ $:.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 require 'gvoice-ruby'
 require 'xmpp4r-simple'
 
-include GvoiceRuby
-
 config = GvoiceRuby::Configurator.load_config
 
 # Main
