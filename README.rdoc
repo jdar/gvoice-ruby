@@ -4,23 +4,20 @@
 
 gvoice-ruby is a library for interacting with Google's Voice service (previously GrandCentral) using ruby.  As Google does not yet publish an official API for Google Voice gvoice-ruby uses the ruby libcurl library (Curb) to interact with the web service itself by using the HTTP verbs POST and GET to send and retrieve information to the Google Voice service.
 
-gvoice-ruby is currently a very preliminary project with limited functionality basically confined to returning arrays of voicemail or sms objects and sending sms messages, or connecting calls.  It cannot cancel calls already in progress.  It currently works under ruby 1.8.7 and 1.9.2-preview1 on my computer running Mac OS X 10.6 (Snow Leopard).  It is not guaranteed to work anywhere else and has very few tests.
+gvoice-ruby is currently a very preliminary project with limited functionality basically confined to returning arrays of voicemail or sms objects and sending sms messages, or connecting calls.  It cannot cancel calls already in progress.  It currently works under ruby 1.8.7-p302 and 1.9.2-p0 on my computer running Mac OS X 10.6 (Snow Leopard).  It is not guaranteed to work anywhere else and has very few tests.
+
+However, you should be able to run bundle install after running git clone as outlined below and it should function.
 
 == Prerequisites
 
-1.) The Curb library (gem install curb)
+1.) Ruby 1.8.7 or 1.9.2
 
-2.) The Nokogiri library (gem install nokogiri)
+2.) Bundler 1.0 (gem install bundler --pre)
+<!-- 1.) The Curb library (gem install curb) -->
 
-3.) The JSON library (gem install json)
+<!-- 2.) The Nokogiri library (gem install nokogiri) -->
 
-4.) Possibly setting your RUBYOPT environment variable to the string 'rubygems'.
-
-	$ RUBYOPT='rubygems'
-	
-	$ echo $RUBYOPT
-	
-	=> rubygems
+<!-- 3.) The JSON library (gem install json) -->
 
 == Installing
 
@@ -28,15 +25,36 @@ Eventually it will be a gem, but for now:
 
 	$ git clone git://github.com/kgautreaux/gvoice-ruby.git
 
+then:
+
+	$ cd gvoice-ruby
+
+and:
+
+	$ bundle install
+
+This should install all the required gems provided you have the right permissions.  
+
+To run the test suite:
+
+	$ bundle exec rake
+
 == Examples
 
-Please see the bin/ directory for examples of using the library to accomplish some tasks.
+Please see the bin/ directory for examples of using the library to accomplish some tasks.  You must run bundle exec 'command' in order for the program to work, i.e.
+
+	$ cd gvoice-ruby
+	$ bundle exec bin/gv-notifier
 
 == Known Issues
 
-The library tries not to require 'rubygems' per http://gist.github.com/54177 and thus works fine on 1.9.2-preview1 but breaks on 1.8.7 unless you invoke any of the scripts with ruby -rubygems [whatever...] or set your RUBYOPT environment variable as noted above.  
+1.) You have to run 'bundle exec bin/"command"' and it must be run in the context of the gvoice-ruby directory.
 
-Alternatively you can require 'rubygems' in your own script using the underlying library or set your $RUBYOPT environment variable as outlined in the gist above, but keep this issue in mind.
+2.) It does some wicked monkeypatching to run on both 1.9.2 and 1.8.7 mostly due to the new Date class in Ruby 1.9.2.
+
+<!-- The library tries not to require 'rubygems' per http://gist.github.com/54177 and thus works fine on 1.9.2 but breaks on 1.8.7 unless you invoke any of the scripts with ruby -rubygems [whatever...] or set your RUBYOPT environment variable as noted above.  
+
+Alternatively you can require 'rubygems' in your own script using the underlying library or set your $RUBYOPT environment variable as outlined in the gist above, but keep this issue in mind. -->
 
 == BUGS
 
@@ -65,6 +83,8 @@ Alternatively you can require 'rubygems' in your own script using the underlying
 12.) Minimal to no error handling present.  Fail silent...Fail deep.
 
 13.) The library doesn't post the id of sms messages it sends so they don't get associated with any conversation in Google Voice.
+
+14.) On Ruby 1.9 and above the library monkeypatches it's own call method to reformat dates.
 
 == Thanks
 
