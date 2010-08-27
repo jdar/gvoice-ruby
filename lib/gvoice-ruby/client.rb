@@ -31,6 +31,7 @@ module GvoiceRuby
          @logger        = Logger.new(config.has_key?(:logfile) ? config[:logfile] :
                                        File.join(File.dirname(__FILE__), '..', '..', 'log', 'gvoice-ruby.log'))
          @user          = User.new(config[:google_account_email], config[:google_account_password])
+         @config        = config
          @any_unread    = []
          @unread_counts = {}
          @all_messages  = []
