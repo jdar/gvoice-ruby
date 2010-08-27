@@ -2,3 +2,4 @@
 *.log
 gvoice-ruby-config.yml
 *.gem
+.rvmrc
