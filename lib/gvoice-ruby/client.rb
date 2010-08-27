@@ -9,19 +9,34 @@ module GvoiceRuby
     attr_accessor :unread_counts, :smss, :voicemails, :user, :all_messages, :calls
     attr_reader :logger
     
+    # def initialize(*args, &block)
+    #   yield(self)
+    #   @config      ||= GvoiceRuby::Configurator.load_config
+    #   @logger        = Logger.new(config.has_key?(:logfile) ? config[:logfile] :
+    #                                 File.join(File.dirname(__FILE__), '..', '..', 'log', 'gvoice-ruby.log'))
+    #   @user          = User.new(config[:google_account_email], config[:google_account_password])
+    #   @any_unread    = []
+    #   @unread_counts = {}
+    #   @all_messages  = []
+    #   initialize_curb
+    #   
+    #   login(config)
+    #   set_rnr_se_token
+    # end
+    
     def initialize(config = GvoiceRuby::Configurator.load_config)
-      if config[:google_account_email].nil? || config[:google_account_password].nil?
-        raise ArgumentError, "Invalid Google Account username or password provided."
-      else          
-        @logger        = Logger.new(config.has_key?(:logfile) ? config[:logfile] :
-                                      File.join(File.dirname(__FILE__), '..', '..', 'log', 'gvoice-ruby.log'))
-        @user          = User.new(config[:google_account_email], config[:google_account_password])
-        @any_unread    = []
-        @unread_counts = {}
-        @all_messages  = []
-        initialize_curb
-      end
-      
+       if config[:google_account_email].nil? || config[:google_account_password].nil?
+         raise ArgumentError, "Invalid Google Account username or password provided."
+       else          
+         @logger        = Logger.new(config.has_key?(:logfile) ? config[:logfile] :
+                                       File.join(File.dirname(__FILE__), '..', '..', 'log', 'gvoice-ruby.log'))
+         @user          = User.new(config[:google_account_email], config[:google_account_password])
+         @any_unread    = []
+         @unread_counts = {}
+         @all_messages  = []
+         initialize_curb
+       end
+       
       login(config)
       set_rnr_se_token
     end
@@ -173,6 +188,8 @@ module GvoiceRuby
     end
     
     private
+    attr_accessor :logger, :user, :config
+    
     def login(options = {})
       @curb_instance.url = 'https://www.google.com/accounts/ServiceLoginAuth'
       @curb_instance.perform
@@ -181,9 +198,9 @@ module GvoiceRuby
       
       defeat_google_xsrf(@curb_instance.body_str)
       
-      fields = [ PostField.content('continue', options[:continue_url]), #'https://www.google.com/voice'
+      fields = [ PostField.content('continue', (options[:continue_url] || 'https://www.google.com/voice')), #'https://www.google.com/voice'
                  PostField.content('GALX', @galx),
-                 PostField.content('service', options[:google_service]),
+                 PostField.content('service', options[:google_service] || 'grandcentral'),
                  PostField.content('Email', options[:google_account_email]),
                  PostField.content('Passwd', options[:google_account_password]) ]
       
