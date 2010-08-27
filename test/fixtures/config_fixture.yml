@@ -1,11 +1,11 @@
 --- 
-:google_voice_feed_url: https://www.google.com/voice/inbox/recent
 :google_service: grandcentral
+:google_voice_feed_url: https://www.google.com/voice/inbox/recent
 :bot_name: test_case@jabber.org
 :google_auth_url: https://www.google.com/accounts/ServiceLoginAuth
-:logfile: test_log.log
+:logfile: ./log/test_log.log
 :bot_password: foo
 :continue_url: https://www.google.com/voice
-:google_account_email: google_test_account@gmail.com
 :last_message_start_time: 1252936650000
+:google_account_email: google_test_account@gmail.com
 :google_account_password: bar

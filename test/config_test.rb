@@ -42,7 +42,9 @@ class ConfigTest < Test::Unit::TestCase
   end
   
   should "Load a logger" do
-    assert_equal(@config[:logfile], 'test_log.log')
+    assert_equal(@config[:logfile], './log/test_log.log')
     assert_not_nil(GvoiceRuby::Client.new(@config).logger)
+    assert_not_nil(File.read('./log/test_log.log'))
+    assert_equal('# Log', File.read('./log/test_log.log')[0..4])
   end
 end
