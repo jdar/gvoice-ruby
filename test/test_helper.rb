@@ -5,8 +5,8 @@ begin
 rescue LoadError
   warn "\nYou need to run 'bundle exec rake test' in order to avoid load errors.\n"
 end
-# $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
-# $LOAD_PATH.unshift(File.dirname(__FILE__))
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
+$LOAD_PATH.unshift(File.dirname(__FILE__))
 require 'gvoice-ruby'
 
 class Test::Unit::TestCase
