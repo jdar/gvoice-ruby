@@ -181,9 +181,9 @@ module GvoiceRuby
       
       defeat_google_xsrf(@curb_instance.body_str)
       
-      fields = [ PostField.content('continue', options[:continue_url]), #'https://www.google.com/voice'
+      fields = [ PostField.content('continue', (options[:continue_url] || 'https://www.google.com/voice')), #'https://www.google.com/voice'
                  PostField.content('GALX', @galx),
-                 PostField.content('service', options[:google_service]),
+                 PostField.content('service', (options[:google_service] || 'grandcentral')),
                  PostField.content('Email', options[:google_account_email]),
                  PostField.content('Passwd', options[:google_account_password]) ]
       
