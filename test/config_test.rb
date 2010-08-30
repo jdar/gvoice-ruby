@@ -4,7 +4,8 @@ require File.dirname(__FILE__) + "/test_helper"
 class ConfigTest < Test::Unit::TestCase
 
   def setup
-    @config = GvoiceRuby::Configurator.load_config(self.config_file)
+    @config_file = File.join(File.dirname(__FILE__), 'fixtures', 'config_fixture.yml')
+    @config = GvoiceRuby::Configurator.load_config(@config_file)
   end
   
   should "have project root constant" do
