@@ -1,7 +1,12 @@
 #!/usr/bin/env ruby -W1
 # -*- encoding: utf-8 -*-
 $:.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
-require 'gvoice-ruby'
+begin
+  require 'gvoice-ruby'
+rescue LoadError
+  warn "\n\nYou must run 'bundle exec #{$0}' to allow loading of correct gems!\n\n"
+  raise
+end
 
 voicebox = GvoiceRuby::Client.new
 

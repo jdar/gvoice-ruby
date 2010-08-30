@@ -1,7 +1,5 @@
 # -*- encoding: utf-8 -*-
 require File.dirname(__FILE__) + "/test_helper"
-
-require "inbox_parser"
 require 'mocha'
 
 class InboxParserTest < Test::Unit::TestCase

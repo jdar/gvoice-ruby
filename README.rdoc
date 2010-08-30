@@ -12,11 +12,17 @@ However, you should be able to run bundle install after running git clone as out
 
 1.) Ruby 1.8.7 or 1.9.2
 
-2.) Bundler 1.0 (gem install bundler --pre)
+2.) Bundler 1.0 (gem install bundler)
 
 == Installing
 
-Eventually it will be a gem, but for now:
+Install the gem:
+
+	$ gem install gvoice-ruby
+
+or
+
+Clone the git repository:
 
 	$ git clone git://github.com/kgautreaux/gvoice-ruby.git
 

@@ -1,17 +1,12 @@
 # -*- encoding: utf-8 -*-
-$:.unshift "./" # Ruby 1.9.2 does not include current directory in the path
+$:.unshift "." # Ruby 1.9.2 does not include current directory in the path
 require File.dirname(__FILE__) + "/test_helper"
-require 'gvoice-ruby/client'
-require 'gvoice-ruby/user'
-require 'gvoice-ruby'
 require 'mocha'
  
 class ClientTest < Test::Unit::TestCase
-  
   def setup
-    setup_config_fixture
+    @config_file = File.join(File.dirname(__FILE__), 'fixtures', 'config_fixture.yml')
     @page_body = String.new(File.read(File.join(File.dirname(__FILE__), 'fixtures', 'login_fixture.html')))
-    # puts @page_body
   end
   
   should "raise argument error if username nil" do

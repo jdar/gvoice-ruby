@@ -201,7 +201,7 @@ module GvoiceRuby
       
       fields = [ PostField.content('continue', (options[:continue_url] || 'https://www.google.com/voice')), #'https://www.google.com/voice'
                  PostField.content('GALX', @galx),
-                 PostField.content('service', options[:google_service] || 'grandcentral'),
+                 PostField.content('service', (options[:google_service] || 'grandcentral')),
                  PostField.content('Email', options[:google_account_email]),
                  PostField.content('Passwd', options[:google_account_password]) ]
       

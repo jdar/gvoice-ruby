@@ -1,8 +1,13 @@
 #!/usr/bin/env ruby -W1
 # -*- encoding: utf-8 -*-
 $:.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
-require 'gvoice-ruby'
-require 'xmpp4r-simple'
+begin
+  require 'gvoice-ruby'
+  require 'xmpp4r-simple'
+rescue LoadError
+  warn "\n\nYou must run 'bundle exec #{$0}' to allow loading of correct gems!\n\n"
+  raise
+end
 
 config = GvoiceRuby::Configurator.load_config
 
