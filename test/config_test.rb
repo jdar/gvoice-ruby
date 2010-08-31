@@ -45,6 +45,6 @@ class ConfigTest < Test::Unit::TestCase
     assert_equal(@config[:logfile], './log/test_log.log')
     assert_not_nil(GvoiceRuby::Client.new(@config).logger)
     assert_not_nil(File.read('./log/test_log.log'))
-    assert_equal('# Log', File.read('./log/test_log.log')[0..4])
+    assert_match(/^# Log/, File.read('./log/test_log.log'))
   end
 end

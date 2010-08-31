@@ -17,9 +17,27 @@ class ClientTest < Test::Unit::TestCase
     assert_raise(ArgumentError) { GvoiceRuby::Client.new({ :google_account_password => nil }) }
   end
   
+  should "accept a simple hash as parameters" do
+    Curl::Easy.any_instance.stubs(:perform).returns(true)
+    Curl::Easy.any_instance.stubs(:body_str).returns(@page_body)
+    client = GvoiceRuby::Client.new({:google_account_email => 'google_test_account@gmail.com', :google_account_password => "bar"})
+    assert_kind_of(GvoiceRuby::Client, client)
+    assert_equal(client.logger.instance_variable_get(:@logdev).instance_variable_get(:@filename),
+      './lib/gvoice-ruby/../../log/gvoice-ruby.log')
+  end
+  
   should "raise an error when unable to connect to Google" do
-    
-    assert true
+    # Curl::Easy.any_instance.stubs(:perform).returns(false)
+    # Curl::Easy.any_instance.stubs(:response_code).returns()
+    client = GvoiceRuby::Client.new(GvoiceRuby::Configurator.load_config(@config_file))
+    assert_equal(client.instance_variable_get(:@curb_instance).response_code, 405)
+  end
+  
+  should "raise an error when failing to login" do
+    Curl::Easy.any_instance.stubs(:perform).returns(false)
+    assert_raise(GvoiceRuby::LoginFailed) do
+      GvoiceRuby::Client.new({:google_account_email => 'google_test_account@gmail.com', :google_account_password => "bar"})
+    end
   end
   
   should "login" do

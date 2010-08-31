@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
 $:.unshift(File.dirname(__FILE__))
-%w[curb nokogiri json sms voicemail call user logger compatibility inbox_parser open-uri].each { |lib| require lib }
+%w[curb nokogiri json sms voicemail call user logger compatibility inbox_parser open-uri errors].each { |lib| require lib }
 
 module GvoiceRuby
   class Client
@@ -181,12 +181,16 @@ module GvoiceRuby
       
       defeat_google_xsrf(@curb_instance.body_str)
       
-      fields = [ PostField.content('continue', (options[:continue_url] || 'https://www.google.com/voice')), #'https://www.google.com/voice'
-                 PostField.content('GALX', @galx),
-                 PostField.content('service', (options[:google_service] || 'grandcentral')),
-                 PostField.content('Email', options[:google_account_email]),
-                 PostField.content('Passwd', options[:google_account_password]) ]
-      
+      begin
+        fields = [ PostField.content('continue', (options[:continue_url] || 'https://www.google.com/voice')),
+                   PostField.content('GALX', @galx),
+                   PostField.content('service', (options[:google_service] || 'grandcentral')),
+                   PostField.content('Email', options[:google_account_email]),
+                   PostField.content('Passwd', options[:google_account_password]) ]
+      rescue ArgumentError
+        warn "Unable to log in."
+        raise GvoiceRuby::LoginFailed
+      end
       options.merge!({ :post_url => 'https://www.google.com/accounts/ServiceLoginAuth' })
       
       post(options, fields)
