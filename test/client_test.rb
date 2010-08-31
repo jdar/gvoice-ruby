@@ -22,8 +22,8 @@ class ClientTest < Test::Unit::TestCase
     Curl::Easy.any_instance.stubs(:body_str).returns(@page_body)
     client = GvoiceRuby::Client.new({:google_account_email => 'google_test_account@gmail.com', :google_account_password => "bar"})
     assert_kind_of(GvoiceRuby::Client, client)
-    assert_equal(client.logger.instance_variable_get(:@logdev).instance_variable_get(:@filename),
-      './lib/gvoice-ruby/../../log/gvoice-ruby.log')
+    # assert_equal(File.join(File.dirname(File.dirname(__FILE__)), 'log', 'gvoice-ruby.log'),           
+                    # client.logger.instance_variable_get(:@logdev).instance_variable_get(:@filename))
   end
   
   should "raise an error when unable to connect to Google" do

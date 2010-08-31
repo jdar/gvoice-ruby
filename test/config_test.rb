@@ -9,7 +9,7 @@ class ConfigTest < Test::Unit::TestCase
   end
   
   should "have project root constant" do
-    assert_equal(File.expand_path(File.dirname(__FILE__) + '/..'), GvoiceRuby::Configurator.const_get(:PROJECT_ROOT))
+    assert_equal(File.expand_path(File.dirname(__FILE__) + '/..'), GvoiceRuby::Configurator.const_get(:PROJECT_ROOT).to_s)
   end
   
   should "load configuration file correctly" do

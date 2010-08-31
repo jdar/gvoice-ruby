@@ -1,4 +1,15 @@
 # -*- encoding: utf-8 -*-
+
+Pathname.class_eval do
+  def ancestor(num)
+    temp = self
+    num.downto(0) do
+      temp = temp.parent
+    end
+    return temp
+  end unless method_defined?(:ancestor)
+end
+
 if RUBY_VERSION > '1.9'
   module GvoiceRuby
     class Call
@@ -24,10 +35,6 @@ if RUBY_VERSION > '1.9'
 end
 
 if RUBY_VERSION < '1.9'
-  # String.instance_eval do
-  #   define_method(:force_encoding) { self } unless method_defined?(:force_encoding)
-  #   define_method(:encoding) { "UTF-8" } unless method_defined?(:encoding)
-  # end
   
   class Symbol
     def to_proc

@@ -3,7 +3,7 @@
 
 module GvoiceRuby
   class Configurator
-    PROJECT_ROOT = File.expand_path(File.dirname(__FILE__) + '/../..')
+    PROJECT_ROOT = File.expand_path(Pathname.new(__FILE__).ancestor(2))
   
     def self.load_config(config_file = File.join(PROJECT_ROOT, 'config', 'gvoice-ruby-config.yml'))
       # Load our config

@@ -7,10 +7,10 @@ GEM
       rake
     nokogiri (1.4.3.1)
     rake (0.8.7)
+    scashin133-xmpp4r-simple (0.8.9)
+      xmpp4r (>= 0.3.2)
     shoulda (2.11.3)
     xmpp4r (0.5)
-    xmpp4r-simple (0.8.8)
-      xmpp4r (>= 0.3.2)
 
 PLATFORMS
   ruby
@@ -20,5 +20,5 @@ DEPENDENCIES
   json
   mocha
   nokogiri
+  scashin133-xmpp4r-simple (= 0.8.9)
   shoulda
-  xmpp4r-simple (= 0.8.8)
