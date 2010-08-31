@@ -1,4 +1,5 @@
 # -*- encoding: utf-8 -*-
+require 'pathname'
 
 Pathname.class_eval do
   def ancestor(num)
