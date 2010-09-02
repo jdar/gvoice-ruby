@@ -199,6 +199,7 @@ module GvoiceRuby
     def post(options, fields)
       @curb_instance.url = options[:post_url] #"https://www.google.com/voice/call/connect || https://www.google.com/voice/sms/send"
       @curb_instance.http_post(fields)
+      raise GvoiceRuby::NetworkError if @curb_instance.response_code != 200
       
       logger.info "FINISHED POST TO #{options[:post_url]}: HTTP #{@curb_instance.response_code}"
       return @curb_instance

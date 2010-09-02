@@ -35,8 +35,6 @@ class InboxParserTest < Test::Unit::TestCase
     parser.parse_sms_messages(inbox['messages'])
     assert_equal(parser.instance_variable_get(:@smss)[0].class, GvoiceRuby::Sms)
     assert_equal(parser.instance_variable_get(:@voicemails), [])
-    # y parser.parse_sms_messages(inbox['messages'])
-    # y parser.instance_variable_get(:@smss)
   end
   
   should "parse voicemail messages" do
@@ -46,8 +44,6 @@ class InboxParserTest < Test::Unit::TestCase
     parser.parse_voicemail_messages(inbox['messages'])
     assert_equal(parser.instance_variable_get(:@voicemails)[0].class, GvoiceRuby::Voicemail)
     assert_equal(parser.instance_variable_get(:@smss), [])
-    # y parser.parse_sms_messages(inbox['messages'])
-    # y parser.instance_variable_get(:@smss)
   end
   
 end

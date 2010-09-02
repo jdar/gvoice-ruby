@@ -22,15 +22,13 @@ class ClientTest < Test::Unit::TestCase
     Curl::Easy.any_instance.stubs(:body_str).returns(@page_body)
     client = GvoiceRuby::Client.new({:google_account_email => 'google_test_account@gmail.com', :google_account_password => "bar"})
     assert_kind_of(GvoiceRuby::Client, client)
-    # assert_equal(File.join(File.dirname(File.dirname(__FILE__)), 'log', 'gvoice-ruby.log'),           
-                    # client.logger.instance_variable_get(:@logdev).instance_variable_get(:@filename))
   end
   
   should "raise an error when unable to connect to Google" do
-    # Curl::Easy.any_instance.stubs(:perform).returns(false)
-    # Curl::Easy.any_instance.stubs(:response_code).returns()
-    client = GvoiceRuby::Client.new(GvoiceRuby::Configurator.load_config(@config_file))
-    assert_equal(client.instance_variable_get(:@curb_instance).response_code, 405)
+    Curl::Easy.any_instance.stubs(:response_code).returns(0)
+    assert_raise(GvoiceRuby::NetworkError) do
+      GvoiceRuby::Client.new({:google_account_email => 'google_test_account@gmail.com', :google_account_password => "bar"})
+    end
   end
   
   should "raise an error when failing to login" do
