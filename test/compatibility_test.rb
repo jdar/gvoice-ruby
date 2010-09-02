@@ -12,6 +12,15 @@ class CompatibilityTest < Test::Unit::TestCase
     @page_obj.stubs(:body_str).returns(@page_body)
   end
   
+  should "add an instance method to Pathname" do
+    assert Pathname.new("/blah").respond_to?(:ancestor)
+  end
+  
+  should "return the appropriate ancestor path" do
+    path = Pathname.new("/Users/foo/bar/baz/bat/quux")
+    assert_equal(Pathname.new("/Users/foo/bar"), path.ancestor(3))
+  end
+  
   if RUBY_VERSION > '1.9'
     context "Using Ruby 1.9" do
       should "Provide correct format of the display_start_date_time method" do
