@@ -1,7 +1,8 @@
 # -*- encoding: utf-8 -*-
 require 'pathname'
 
-# Pathname#ancestor takes an integer argument and walks up the path the same number of steps as the integer argument (starting from zero).
+# Pathname#ancestor takes an integer argument and walks up the path, starting at the distal portion, the same number of steps as the integer # argument (starting from zero).
+#
 # Hence, given the path /Users/foo/bar/baz/bat/quux, Pathname#ancestor(3) would return /Users/foo/bar.
 Pathname.class_eval do
   def ancestor(num)
